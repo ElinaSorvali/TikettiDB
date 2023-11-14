@@ -1,0 +1,66 @@
+﻿@model TikettiDB.Models.Tikettitiedot
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tikettitiedot</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PVM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PVM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ongelman_kuvaus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ongelman_kuvaus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Asiakastiedot.Etunimi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Asiakastiedot.Etunimi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IT_tukihenkilot.Etunimi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IT_tukihenkilot.Etunimi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LaitteenTyyppi.Laitteen_nimi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LaitteenTyyppi.Laitteen_nimi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YhteydenTyyppi.Yhteyden_tyyppi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YhteydenTyyppi.Yhteyden_tyyppi)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TikettiID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,589 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TikettiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asiakastiedot">
+          <Key>
+            <PropertyRef Name="AsiakasID" />
+          </Key>
+          <Property Name="AsiakasID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Etunimi" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Sukunimi" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Puhelinnro" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Sahkoposti" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="SijaintiID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IT-tukihenkilot">
+          <Key>
+            <PropertyRef Name="itHenkiloID" />
+          </Key>
+          <Property Name="itHenkiloID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Etunimi" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Sukunimi" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Puhelinnro" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Sahkoposti" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kirjautuminen">
+          <Key>
+            <PropertyRef Name="Sahkoposti" />
+          </Key>
+          <Property Name="Sahkoposti" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salasana" Type="nchar" MaxLength="15" Nullable="false" />
+          <Property Name="Taso" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LaitteenTyyppi">
+          <Key>
+            <PropertyRef Name="LaitenumeroID" />
+          </Key>
+          <Property Name="LaitenumeroID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Laitteen nimi" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="SijaintiID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Postinumero">
+          <Key>
+            <PropertyRef Name="Postinro" />
+          </Key>
+          <Property Name="Postinro" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="Postitmp" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sijainti">
+          <Key>
+            <PropertyRef Name="SijaintiID" />
+          </Key>
+          <Property Name="SijaintiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Osoite" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="Postinro" Type="nchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tikettitiedot">
+          <Key>
+            <PropertyRef Name="TikettiID" />
+          </Key>
+          <Property Name="TikettiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="YhteysID" Type="int" Nullable="false" />
+          <Property Name="LaitenumeroID" Type="int" Nullable="false" />
+          <Property Name="AsiakasID" Type="int" Nullable="false" />
+          <Property Name="PVM" Type="date" Nullable="false" />
+          <Property Name="Ongelman kuvaus" Type="nchar" MaxLength="1000" Nullable="false" />
+          <Property Name="itHenkiloID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="YhteydenTyyppi">
+          <Key>
+            <PropertyRef Name="YhteysID" />
+          </Key>
+          <Property Name="YhteysID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Yhteyden tyyppi" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Asiakastiedot_Kirjautuminen">
+          <End Role="Kirjautuminen" Type="Self.Kirjautuminen" Multiplicity="1" />
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kirjautuminen">
+              <PropertyRef Name="Sahkoposti" />
+            </Principal>
+            <Dependent Role="Asiakastiedot">
+              <PropertyRef Name="Sahkoposti" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Asiakastiedot_Sijainti">
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="1" />
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sijainti">
+              <PropertyRef Name="SijaintiID" />
+            </Principal>
+            <Dependent Role="Asiakastiedot">
+              <PropertyRef Name="SijaintiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IT-tukihenkilot_Kirjautuminen">
+          <End Role="Kirjautuminen" Type="Self.Kirjautuminen" Multiplicity="1" />
+          <End Role="IT-tukihenkilot" Type="Self.IT-tukihenkilot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kirjautuminen">
+              <PropertyRef Name="Sahkoposti" />
+            </Principal>
+            <Dependent Role="IT-tukihenkilot">
+              <PropertyRef Name="Sahkoposti" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LaitteenTyyppi_Sijainti">
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="1" />
+          <End Role="LaitteenTyyppi" Type="Self.LaitteenTyyppi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sijainti">
+              <PropertyRef Name="SijaintiID" />
+            </Principal>
+            <Dependent Role="LaitteenTyyppi">
+              <PropertyRef Name="SijaintiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sijainti_Postinumero">
+          <End Role="Postinumero" Type="Self.Postinumero" Multiplicity="1" />
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Postinumero">
+              <PropertyRef Name="Postinro" />
+            </Principal>
+            <Dependent Role="Sijainti">
+              <PropertyRef Name="Postinro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_Asiakastiedot">
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asiakastiedot">
+              <PropertyRef Name="AsiakasID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="AsiakasID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_IT-tukihenkilot">
+          <End Role="IT-tukihenkilot" Type="Self.IT-tukihenkilot" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IT-tukihenkilot">
+              <PropertyRef Name="itHenkiloID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="itHenkiloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_LaitteenTyyppi">
+          <End Role="LaitteenTyyppi" Type="Self.LaitteenTyyppi" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LaitteenTyyppi">
+              <PropertyRef Name="LaitenumeroID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="LaitenumeroID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_YhteydenTyyppi">
+          <End Role="YhteydenTyyppi" Type="Self.YhteydenTyyppi" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YhteydenTyyppi">
+              <PropertyRef Name="YhteysID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="YhteysID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TikettiDBModelStoreContainer">
+          <EntitySet Name="Asiakastiedot" EntityType="Self.Asiakastiedot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IT-tukihenkilot" EntityType="Self.IT-tukihenkilot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kirjautuminen" EntityType="Self.Kirjautuminen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LaitteenTyyppi" EntityType="Self.LaitteenTyyppi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Postinumero" EntityType="Self.Postinumero" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sijainti" EntityType="Self.Sijainti" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tikettitiedot" EntityType="Self.Tikettitiedot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YhteydenTyyppi" EntityType="Self.YhteydenTyyppi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Asiakastiedot_Kirjautuminen" Association="Self.FK_Asiakastiedot_Kirjautuminen">
+            <End Role="Kirjautuminen" EntitySet="Kirjautuminen" />
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Asiakastiedot_Sijainti" Association="Self.FK_Asiakastiedot_Sijainti">
+            <End Role="Sijainti" EntitySet="Sijainti" />
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IT-tukihenkilot_Kirjautuminen" Association="Self.FK_IT-tukihenkilot_Kirjautuminen">
+            <End Role="Kirjautuminen" EntitySet="Kirjautuminen" />
+            <End Role="IT-tukihenkilot" EntitySet="IT-tukihenkilot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LaitteenTyyppi_Sijainti" Association="Self.FK_LaitteenTyyppi_Sijainti">
+            <End Role="Sijainti" EntitySet="Sijainti" />
+            <End Role="LaitteenTyyppi" EntitySet="LaitteenTyyppi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sijainti_Postinumero" Association="Self.FK_Sijainti_Postinumero">
+            <End Role="Postinumero" EntitySet="Postinumero" />
+            <End Role="Sijainti" EntitySet="Sijainti" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_Asiakastiedot" Association="Self.FK_Tikettitiedot_Asiakastiedot">
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_IT-tukihenkilot" Association="Self.FK_Tikettitiedot_IT-tukihenkilot">
+            <End Role="IT-tukihenkilot" EntitySet="IT-tukihenkilot" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_LaitteenTyyppi" Association="Self.FK_Tikettitiedot_LaitteenTyyppi">
+            <End Role="LaitteenTyyppi" EntitySet="LaitteenTyyppi" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_YhteydenTyyppi" Association="Self.FK_Tikettitiedot_YhteydenTyyppi">
+            <End Role="YhteydenTyyppi" EntitySet="YhteydenTyyppi" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TikettiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Asiakastiedot">
+          <Key>
+            <PropertyRef Name="AsiakasID" />
+          </Key>
+          <Property Name="AsiakasID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Etunimi" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Sukunimi" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Puhelinnro" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Sahkoposti" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="SijaintiID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Kirjautuminen" Relationship="Self.FK_Asiakastiedot_Kirjautuminen" FromRole="Asiakastiedot" ToRole="Kirjautuminen" />
+          <NavigationProperty Name="Sijainti" Relationship="Self.FK_Asiakastiedot_Sijainti" FromRole="Asiakastiedot" ToRole="Sijainti" />
+          <NavigationProperty Name="Tikettitiedot" Relationship="Self.FK_Tikettitiedot_Asiakastiedot" FromRole="Asiakastiedot" ToRole="Tikettitiedot" />
+        </EntityType>
+        <EntityType Name="IT_tukihenkilot">
+          <Key>
+            <PropertyRef Name="itHenkiloID" />
+          </Key>
+          <Property Name="itHenkiloID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Etunimi" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Sukunimi" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Puhelinnro" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Sahkoposti" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Kirjautuminen" Relationship="Self.FK_IT_tukihenkilot_Kirjautuminen" FromRole="IT_tukihenkilot" ToRole="Kirjautuminen" />
+          <NavigationProperty Name="Tikettitiedot" Relationship="Self.FK_Tikettitiedot_IT_tukihenkilot" FromRole="IT_tukihenkilot" ToRole="Tikettitiedot" />
+        </EntityType>
+        <EntityType Name="Kirjautuminen">
+          <Key>
+            <PropertyRef Name="Sahkoposti" />
+          </Key>
+          <Property Name="Sahkoposti" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Salasana" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Taso" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Asiakastiedot" Relationship="Self.FK_Asiakastiedot_Kirjautuminen" FromRole="Kirjautuminen" ToRole="Asiakastiedot" />
+          <NavigationProperty Name="IT_tukihenkilot" Relationship="Self.FK_IT_tukihenkilot_Kirjautuminen" FromRole="Kirjautuminen" ToRole="IT_tukihenkilot" />
+        </EntityType>
+        <EntityType Name="LaitteenTyyppi">
+          <Key>
+            <PropertyRef Name="LaitenumeroID" />
+          </Key>
+          <Property Name="LaitenumeroID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Laitteen_nimi" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="SijaintiID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Sijainti" Relationship="Self.FK_LaitteenTyyppi_Sijainti" FromRole="LaitteenTyyppi" ToRole="Sijainti" />
+          <NavigationProperty Name="Tikettitiedot" Relationship="Self.FK_Tikettitiedot_LaitteenTyyppi" FromRole="LaitteenTyyppi" ToRole="Tikettitiedot" />
+        </EntityType>
+        <EntityType Name="Postinumero">
+          <Key>
+            <PropertyRef Name="Postinro" />
+          </Key>
+          <Property Name="Postinro" Type="String" MaxLength="5" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Postitmp" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Sijainti" Relationship="Self.FK_Sijainti_Postinumero" FromRole="Postinumero" ToRole="Sijainti" />
+        </EntityType>
+        <EntityType Name="Sijainti">
+          <Key>
+            <PropertyRef Name="SijaintiID" />
+          </Key>
+          <Property Name="SijaintiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Osoite" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Postinro" Type="String" MaxLength="5" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Asiakastiedot" Relationship="Self.FK_Asiakastiedot_Sijainti" FromRole="Sijainti" ToRole="Asiakastiedot" />
+          <NavigationProperty Name="LaitteenTyyppi" Relationship="Self.FK_LaitteenTyyppi_Sijainti" FromRole="Sijainti" ToRole="LaitteenTyyppi" />
+          <NavigationProperty Name="Postinumero" Relationship="Self.FK_Sijainti_Postinumero" FromRole="Sijainti" ToRole="Postinumero" />
+        </EntityType>
+        <EntityType Name="Tikettitiedot">
+          <Key>
+            <PropertyRef Name="TikettiID" />
+          </Key>
+          <Property Name="TikettiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="YhteysID" Type="Int32" Nullable="false" />
+          <Property Name="LaitenumeroID" Type="Int32" Nullable="false" />
+          <Property Name="AsiakasID" Type="Int32" Nullable="false" />
+          <Property Name="PVM" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Ongelman_kuvaus" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="itHenkiloID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Asiakastiedot" Relationship="Self.FK_Tikettitiedot_Asiakastiedot" FromRole="Tikettitiedot" ToRole="Asiakastiedot" />
+          <NavigationProperty Name="IT_tukihenkilot" Relationship="Self.FK_Tikettitiedot_IT_tukihenkilot" FromRole="Tikettitiedot" ToRole="IT_tukihenkilot" />
+          <NavigationProperty Name="LaitteenTyyppi" Relationship="Self.FK_Tikettitiedot_LaitteenTyyppi" FromRole="Tikettitiedot" ToRole="LaitteenTyyppi" />
+          <NavigationProperty Name="YhteydenTyyppi" Relationship="Self.FK_Tikettitiedot_YhteydenTyyppi" FromRole="Tikettitiedot" ToRole="YhteydenTyyppi" />
+        </EntityType>
+        <EntityType Name="YhteydenTyyppi">
+          <Key>
+            <PropertyRef Name="YhteysID" />
+          </Key>
+          <Property Name="YhteysID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Yhteyden_tyyppi" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Tikettitiedot" Relationship="Self.FK_Tikettitiedot_YhteydenTyyppi" FromRole="YhteydenTyyppi" ToRole="Tikettitiedot" />
+        </EntityType>
+        <Association Name="FK_Asiakastiedot_Kirjautuminen">
+          <End Role="Kirjautuminen" Type="Self.Kirjautuminen" Multiplicity="1" />
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kirjautuminen">
+              <PropertyRef Name="Sahkoposti" />
+            </Principal>
+            <Dependent Role="Asiakastiedot">
+              <PropertyRef Name="Sahkoposti" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Asiakastiedot_Sijainti">
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="1" />
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sijainti">
+              <PropertyRef Name="SijaintiID" />
+            </Principal>
+            <Dependent Role="Asiakastiedot">
+              <PropertyRef Name="SijaintiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_Asiakastiedot">
+          <End Role="Asiakastiedot" Type="Self.Asiakastiedot" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asiakastiedot">
+              <PropertyRef Name="AsiakasID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="AsiakasID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IT_tukihenkilot_Kirjautuminen">
+          <End Role="Kirjautuminen" Type="Self.Kirjautuminen" Multiplicity="1" />
+          <End Role="IT_tukihenkilot" Type="Self.IT_tukihenkilot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kirjautuminen">
+              <PropertyRef Name="Sahkoposti" />
+            </Principal>
+            <Dependent Role="IT_tukihenkilot">
+              <PropertyRef Name="Sahkoposti" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_IT_tukihenkilot">
+          <End Role="IT_tukihenkilot" Type="Self.IT_tukihenkilot" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IT_tukihenkilot">
+              <PropertyRef Name="itHenkiloID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="itHenkiloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LaitteenTyyppi_Sijainti">
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="1" />
+          <End Role="LaitteenTyyppi" Type="Self.LaitteenTyyppi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sijainti">
+              <PropertyRef Name="SijaintiID" />
+            </Principal>
+            <Dependent Role="LaitteenTyyppi">
+              <PropertyRef Name="SijaintiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_LaitteenTyyppi">
+          <End Role="LaitteenTyyppi" Type="Self.LaitteenTyyppi" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LaitteenTyyppi">
+              <PropertyRef Name="LaitenumeroID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="LaitenumeroID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sijainti_Postinumero">
+          <End Role="Postinumero" Type="Self.Postinumero" Multiplicity="1" />
+          <End Role="Sijainti" Type="Self.Sijainti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Postinumero">
+              <PropertyRef Name="Postinro" />
+            </Principal>
+            <Dependent Role="Sijainti">
+              <PropertyRef Name="Postinro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tikettitiedot_YhteydenTyyppi">
+          <End Role="YhteydenTyyppi" Type="Self.YhteydenTyyppi" Multiplicity="1" />
+          <End Role="Tikettitiedot" Type="Self.Tikettitiedot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YhteydenTyyppi">
+              <PropertyRef Name="YhteysID" />
+            </Principal>
+            <Dependent Role="Tikettitiedot">
+              <PropertyRef Name="YhteysID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TikettiDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Asiakastiedot" EntityType="Self.Asiakastiedot" />
+          <EntitySet Name="IT_tukihenkilot" EntityType="Self.IT_tukihenkilot" />
+          <EntitySet Name="Kirjautuminen" EntityType="Self.Kirjautuminen" />
+          <EntitySet Name="LaitteenTyyppi" EntityType="Self.LaitteenTyyppi" />
+          <EntitySet Name="Postinumero" EntityType="Self.Postinumero" />
+          <EntitySet Name="Sijainti" EntityType="Self.Sijainti" />
+          <EntitySet Name="Tikettitiedot" EntityType="Self.Tikettitiedot" />
+          <EntitySet Name="YhteydenTyyppi" EntityType="Self.YhteydenTyyppi" />
+          <AssociationSet Name="FK_Asiakastiedot_Kirjautuminen" Association="Self.FK_Asiakastiedot_Kirjautuminen">
+            <End Role="Kirjautuminen" EntitySet="Kirjautuminen" />
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Asiakastiedot_Sijainti" Association="Self.FK_Asiakastiedot_Sijainti">
+            <End Role="Sijainti" EntitySet="Sijainti" />
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_Asiakastiedot" Association="Self.FK_Tikettitiedot_Asiakastiedot">
+            <End Role="Asiakastiedot" EntitySet="Asiakastiedot" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IT_tukihenkilot_Kirjautuminen" Association="Self.FK_IT_tukihenkilot_Kirjautuminen">
+            <End Role="Kirjautuminen" EntitySet="Kirjautuminen" />
+            <End Role="IT_tukihenkilot" EntitySet="IT_tukihenkilot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_IT_tukihenkilot" Association="Self.FK_Tikettitiedot_IT_tukihenkilot">
+            <End Role="IT_tukihenkilot" EntitySet="IT_tukihenkilot" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LaitteenTyyppi_Sijainti" Association="Self.FK_LaitteenTyyppi_Sijainti">
+            <End Role="Sijainti" EntitySet="Sijainti" />
+            <End Role="LaitteenTyyppi" EntitySet="LaitteenTyyppi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_LaitteenTyyppi" Association="Self.FK_Tikettitiedot_LaitteenTyyppi">
+            <End Role="LaitteenTyyppi" EntitySet="LaitteenTyyppi" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sijainti_Postinumero" Association="Self.FK_Sijainti_Postinumero">
+            <End Role="Postinumero" EntitySet="Postinumero" />
+            <End Role="Sijainti" EntitySet="Sijainti" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tikettitiedot_YhteydenTyyppi" Association="Self.FK_Tikettitiedot_YhteydenTyyppi">
+            <End Role="YhteydenTyyppi" EntitySet="YhteydenTyyppi" />
+            <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TikettiDBModelStoreContainer" CdmEntityContainer="TikettiDBEntities">
+          <EntitySetMapping Name="Asiakastiedot">
+            <EntityTypeMapping TypeName="TikettiDBModel.Asiakastiedot">
+              <MappingFragment StoreEntitySet="Asiakastiedot">
+                <ScalarProperty Name="AsiakasID" ColumnName="AsiakasID" />
+                <ScalarProperty Name="Etunimi" ColumnName="Etunimi" />
+                <ScalarProperty Name="Sukunimi" ColumnName="Sukunimi" />
+                <ScalarProperty Name="Puhelinnro" ColumnName="Puhelinnro" />
+                <ScalarProperty Name="Sahkoposti" ColumnName="Sahkoposti" />
+                <ScalarProperty Name="SijaintiID" ColumnName="SijaintiID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IT_tukihenkilot">
+            <EntityTypeMapping TypeName="TikettiDBModel.IT_tukihenkilot">
+              <MappingFragment StoreEntitySet="IT-tukihenkilot">
+                <ScalarProperty Name="itHenkiloID" ColumnName="itHenkiloID" />
+                <ScalarProperty Name="Etunimi" ColumnName="Etunimi" />
+                <ScalarProperty Name="Sukunimi" ColumnName="Sukunimi" />
+                <ScalarProperty Name="Puhelinnro" ColumnName="Puhelinnro" />
+                <ScalarProperty Name="Sahkoposti" ColumnName="Sahkoposti" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kirjautuminen">
+            <EntityTypeMapping TypeName="TikettiDBModel.Kirjautuminen">
+              <MappingFragment StoreEntitySet="Kirjautuminen">
+                <ScalarProperty Name="Sahkoposti" ColumnName="Sahkoposti" />
+                <ScalarProperty Name="Salasana" ColumnName="Salasana" />
+                <ScalarProperty Name="Taso" ColumnName="Taso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LaitteenTyyppi">
+            <EntityTypeMapping TypeName="TikettiDBModel.LaitteenTyyppi">
+              <MappingFragment StoreEntitySet="LaitteenTyyppi">
+                <ScalarProperty Name="LaitenumeroID" ColumnName="LaitenumeroID" />
+                <ScalarProperty Name="Laitteen_nimi" ColumnName="Laitteen nimi" />
+                <ScalarProperty Name="SijaintiID" ColumnName="SijaintiID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Postinumero">
+            <EntityTypeMapping TypeName="TikettiDBModel.Postinumero">
+              <MappingFragment StoreEntitySet="Postinumero">
+                <ScalarProperty Name="Postinro" ColumnName="Postinro" />
+                <ScalarProperty Name="Postitmp" ColumnName="Postitmp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sijainti">
+            <EntityTypeMapping TypeName="TikettiDBModel.Sijainti">
+              <MappingFragment StoreEntitySet="Sijainti">
+                <ScalarProperty Name="SijaintiID" ColumnName="SijaintiID" />
+                <ScalarProperty Name="Osoite" ColumnName="Osoite" />
+                <ScalarProperty Name="Postinro" ColumnName="Postinro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tikettitiedot">
+            <EntityTypeMapping TypeName="TikettiDBModel.Tikettitiedot">
+              <MappingFragment StoreEntitySet="Tikettitiedot">
+                <ScalarProperty Name="TikettiID" ColumnName="TikettiID" />
+                <ScalarProperty Name="YhteysID" ColumnName="YhteysID" />
+                <ScalarProperty Name="LaitenumeroID" ColumnName="LaitenumeroID" />
+                <ScalarProperty Name="AsiakasID" ColumnName="AsiakasID" />
+                <ScalarProperty Name="PVM" ColumnName="PVM" />
+                <ScalarProperty Name="Ongelman_kuvaus" ColumnName="Ongelman kuvaus" />
+                <ScalarProperty Name="itHenkiloID" ColumnName="itHenkiloID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YhteydenTyyppi">
+            <EntityTypeMapping TypeName="TikettiDBModel.YhteydenTyyppi">
+              <MappingFragment StoreEntitySet="YhteydenTyyppi">
+                <ScalarProperty Name="YhteysID" ColumnName="YhteysID" />
+                <ScalarProperty Name="Yhteyden_tyyppi" ColumnName="Yhteyden tyyppi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
