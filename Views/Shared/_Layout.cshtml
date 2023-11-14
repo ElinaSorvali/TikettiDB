@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Tiketti</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
@@ -17,12 +17,26 @@
         }
         else
         {
-            Html.RenderPartial("_NavbarLoggedIn");
+            switch ((int)Session["Taso"])  //Homecontrollissa haettiin tasot tietokannasta ja tässä käytetään
+            {
+                case 1:
+                    Html.RenderPartial("_NavbarLogged1");
+                    break;
+                case 2:
+                    Html.RenderPartial("_NavbarLogged2");
+                    break;
+                case 3:
+                    Html.RenderPartial("_NavbarLogged3");
+                    break;
+                default:
+                    Html.RenderPartial("_NavbarLoggedOut");
+                    break;
+            }
         }
     }
 
 
-
+    @*Sivun alaosassa näkyvä käyttäjätieto ja päivämäärä*@
     <div class="container-fluid">
         @RenderBody()
         <hr />

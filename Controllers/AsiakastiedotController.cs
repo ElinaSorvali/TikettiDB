@@ -39,14 +39,12 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot/Create
         public ActionResult Create()
         {
-            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Salasana");
+            //ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Salasana");
             ViewBag.SijaintiID = new SelectList(db.Sijainti, "SijaintiID", "Osoite");
             return View();
         }
 
         // POST: Asiakastiedot/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "AsiakasID,Etunimi,Sukunimi,Puhelinnro,Sahkoposti,SijaintiID")] Asiakastiedot asiakastiedot)

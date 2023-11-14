@@ -261,8 +261,10 @@
     <Content Include="Views\Tikettitiedot\Edit.cshtml" />
     <Content Include="Views\Tikettitiedot\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Shared\_NavbarLoggedIn.cshtml" />
+    <Content Include="Views\Shared\_NavbarLogged3.cshtml" />
     <Content Include="Views\Shared\_NavbarLoggedOut.cshtml" />
+    <Content Include="Views\Shared\_NavbarLogged2.cshtml" />
+    <Content Include="Views\Shared\_NavbarLogged1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

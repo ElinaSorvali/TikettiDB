@@ -22,8 +22,9 @@ namespace TikettiDB.Controllers
                 //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
                 string userName = Session["Sahkoposti"].ToString();
                 ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
+                return View();
             }
-            return View();
+            
         }
 
         public ActionResult Login()
@@ -35,24 +36,42 @@ namespace TikettiDB.Controllers
         public ActionResult Authorize(Kirjautuminen LoginModel)
         {
             TikettiDBEntities db = new TikettiDBEntities();
-            //Haetaan käyttäjän tiedot annetuilla tunnustiedoilla tietokannasta LINQ -kyselyllä
+            // Haetaan käyttäjän tiedot annetuilla tunnustiedoilla tietokannasta LINQ -kyselyllä
             var LoggedUser = db.Kirjautuminen.SingleOrDefault(x => x.Sahkoposti == LoginModel.Sahkoposti && x.Salasana == LoginModel.Salasana);
+
             if (LoggedUser != null)
             {
                 ViewBag.LoginMessage = "Successfull login";
                 ViewBag.LoggedStatus = "In";
                 Session["Sahkoposti"] = LoggedUser.Sahkoposti;
-                //Session["LoginID"] = LoggedUser.LoginId;
-                return RedirectToAction("Index", "Home"); //Tässä määritellään mihin onnistunut kirjautuminen johtaa --> Home/Index
+
+                // Hae käyttäjän taso tietokannasta Layoutissa olevaa navbaria varten
+                int userLevel = LoggedUser.Taso; 
+                Session["Taso"] = userLevel;
+
+                switch (userLevel)
+                {
+                    //Tässä on vain esimerkkisivut, jotka pitää muuttaa kun sivut ovat olemassa
+                    case 1:
+                        return RedirectToAction("Index", "Asiakastiedot");
+                    case 2:
+                        return RedirectToAction("Index", "IT_tukihenkilot");
+                    case 3:
+                        return RedirectToAction("Index", "Tikettitiedot");
+                    default:
+                        // Käyttäjällä ei ole määriteltyä tasoa
+                        return RedirectToAction("Index", "Home");
+                }
             }
             else
             {
                 ViewBag.LoginMessage = "Login unsuccessfull";
                 ViewBag.LoginError = 1;
                 LoginModel.LoginErrorMessage = "Tuntematon käyttäjätunnus tai salasana.";
-                return View("Index", LoginModel);
+                return View("Login", LoginModel);
             }
         }
+
         public ActionResult LogOut()
         {
             Session.Abandon();
