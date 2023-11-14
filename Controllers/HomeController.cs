@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
+using TikettiDB.Models;
 
 namespace TikettiDB.Controllers
 {
@@ -10,21 +12,72 @@ namespace TikettiDB.Controllers
     {
         public ActionResult Index()
         {
+            //Jos haluaa että kirjautuminen tapahtuu heti etusivulla
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("login", "home");
+            }
+            else
+            {
+                ViewBag.Message = "Mitä tähän tulee";
+                ViewBag.UserName = Session["username"];
+                return View();
+            }
+
+            //Statukset kirjautumistilanteen mukaan ja toinen status yläpalkkia varten
+            if (Session["UserName"] == null)
+            {
+                ViewBag.LoggedStatus = "Tervetuloa, aloita kirjautumalla sisään!";
+                ViewBag.LoggedStatus1 = "Kirjaudu sisään";
+            }
+            else
+            {
+                //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
+                string userName = Session["UserName"].ToString();
+                ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
+            }
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Login()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult Authorize(Kirjautuminen LoginModel)
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            TikettiDBEntities db = new TikettiDBEntities();
+            //Haetaan käyttäjän/Loginin tiedot annetuilla tunnustiedoilla tietokannasta LINQ -kyselyllä
+            var LoggedUser = db.Kirjautuminen.SingleOrDefault(x => x.Sahkoposti == LoginModel.Sahkoposti && x.Salasana == LoginModel.Salasana);
+            if (LoggedUser != null)
+            {
+                ViewBag.LoginMessage = "Successfull login";
+                ViewBag.LoggedStatus = "In";
+                Session["UserName"] = LoggedUser.Sahkoposti;
+                //Session["LoginID"] = LoggedUser.LoginId;
+                return RedirectToAction("Index", "Home"); //Tässä määritellään mihin onnistunut kirjautuminen johtaa --> Home/Index
+            }
+            else
+            {
+                ViewBag.LoginMessage = "Login unsuccessfull";
+                ViewBag.LoginError = 1;
+                LoginModel.LoginErrorMessage = "Tuntematon käyttäjätunnus tai salasana.";
+                return View("Index", LoginModel);
+            }
         }
+        public ActionResult LogOut()
+        {
+            Session.Abandon();
+            ViewBag.LoggedStatus = "Out";
+            return RedirectToAction("Index", "Home"); //Uloskirjautumisen jälkeen kirjautumissivulle
+        }
+
+        //public ActionResult Contact()
+        //{
+        //    ViewBag.Message = "Your contact page.";
+
+        //    return View();
+        //}
     }
 }

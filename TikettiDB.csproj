@@ -260,6 +260,7 @@
     <Content Include="Views\Tikettitiedot\Details.cshtml" />
     <Content Include="Views\Tikettitiedot\Edit.cshtml" />
     <Content Include="Views\Tikettitiedot\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,44 @@
+﻿@model TikettiDB.Models.Kirjautuminen
+
+@{
+    ViewBag.Title = "Kirjaudu sisään";
+}
+
+<h2>Kirjaudu sisään!</h2>
+
+@using (Html.BeginForm("Authorize", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Kirjoita käyttäjätunnuksesi sekä salasanasi.</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Sahkoposti)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sahkoposti, "Käyttäjätunnus", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sahkoposti, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sahkoposti, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <label class="text-danger">
+            @Html.DisplayFor(model => model.LoginErrorMessage)
+        </label>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Kirjaudu sisään" class="btn btn-outline-success" />
+            </div>
+        </div>
+    </div>
+}
+
