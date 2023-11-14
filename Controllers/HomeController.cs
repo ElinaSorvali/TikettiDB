@@ -12,28 +12,15 @@ namespace TikettiDB.Controllers
     {
         public ActionResult Index()
         {
-            //Jos haluaa että kirjautuminen tapahtuu heti etusivulla
-            if (Session["UserName"] == null)
-            {
-                return RedirectToAction("login", "home");
-            }
-            else
-            {
-                ViewBag.Message = "Mitä tähän tulee";
-                ViewBag.UserName = Session["username"];
-                return View();
-            }
-
             //Statukset kirjautumistilanteen mukaan ja toinen status yläpalkkia varten
-            if (Session["UserName"] == null)
+            if (Session["Sahkoposti"] == null)
             {
-                ViewBag.LoggedStatus = "Tervetuloa, aloita kirjautumalla sisään!";
-                ViewBag.LoggedStatus1 = "Kirjaudu sisään";
+                return RedirectToAction("Login", "Home");
             }
             else
             {
                 //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
-                string userName = Session["UserName"].ToString();
+                string userName = Session["Sahkoposti"].ToString();
                 ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
             }
             return View();
@@ -48,13 +35,13 @@ namespace TikettiDB.Controllers
         public ActionResult Authorize(Kirjautuminen LoginModel)
         {
             TikettiDBEntities db = new TikettiDBEntities();
-            //Haetaan käyttäjän/Loginin tiedot annetuilla tunnustiedoilla tietokannasta LINQ -kyselyllä
+            //Haetaan käyttäjän tiedot annetuilla tunnustiedoilla tietokannasta LINQ -kyselyllä
             var LoggedUser = db.Kirjautuminen.SingleOrDefault(x => x.Sahkoposti == LoginModel.Sahkoposti && x.Salasana == LoginModel.Salasana);
             if (LoggedUser != null)
             {
                 ViewBag.LoginMessage = "Successfull login";
                 ViewBag.LoggedStatus = "In";
-                Session["UserName"] = LoggedUser.Sahkoposti;
+                Session["Sahkoposti"] = LoggedUser.Sahkoposti;
                 //Session["LoginID"] = LoggedUser.LoginId;
                 return RedirectToAction("Index", "Home"); //Tässä määritellään mihin onnistunut kirjautuminen johtaa --> Home/Index
             }

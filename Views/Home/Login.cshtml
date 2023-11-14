@@ -13,8 +13,8 @@
     <div class="form-horizontal">
         <h4>Kirjoita käyttäjätunnuksesi sekä salasanasi.</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Sahkoposti)
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Sahkoposti)*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Sahkoposti, "Käyttäjätunnus", htmlAttributes: new { @class = "control-label col-md-2" })
