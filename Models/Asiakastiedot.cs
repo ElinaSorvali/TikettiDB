@@ -25,10 +25,14 @@ namespace TikettiDB.Models
         public string Sukunimi { get; set; }
         public string Puhelinnro { get; set; }
         public string Sahkoposti { get; set; }
+        public string Osoite { get; set; }
+        public string Postinro { get; set; }
+        public string Salasana { get; set; }
         public int SijaintiID { get; set; }
     
         public virtual Kirjautuminen Kirjautuminen { get; set; }
         public virtual Sijainti Sijainti { get; set; }
+        public virtual Postinumero Postinumero { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tikettitiedot> Tikettitiedot { get; set; }
     }

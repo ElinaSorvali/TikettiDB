@@ -39,27 +39,80 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot/Create
         public ActionResult Create()
         {
-            //ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Salasana");
-            ViewBag.SijaintiID = new SelectList(db.Sijainti, "SijaintiID", "Osoite");
+            ViewBag.SijaintiID = new SelectList(db.Sijainti, "SijaintiID", "Osoite", "Postinro");
+            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Salasana");
+            //ViewBag.Osoite = new SelectList(db.Sijainti, "Osoite");
+            ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro");
+
             return View();
         }
 
         // POST: Asiakastiedot/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AsiakasID,Etunimi,Sukunimi,Puhelinnro,Sahkoposti,SijaintiID")] Asiakastiedot asiakastiedot)
+        public ActionResult Create([Bind(Include = "Etunimi,Sukunimi,Puhelinnro,Osoite,Postinro,Sahkoposti,Salasana")] Asiakastiedot asiakastiedot)
         {
             if (ModelState.IsValid)
             {
-                db.Asiakastiedot.Add(asiakastiedot);
+                // Etsi tai luo Postinumero
+                Postinumero postinumero = db.Postinumero.SingleOrDefault(p => p.Postinro == asiakastiedot.Postinro);
+                if (postinumero == null)
+                {
+                    postinumero = new Postinumero
+                    {
+                        Postinro = asiakastiedot.Postinro
+                    };
+                    db.Postinumero.Add(postinumero);
+                }
+
+                // Etsi tai luo Kirjautuminen
+                Kirjautuminen kirjautuminen = db.Kirjautuminen.SingleOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
+                if (kirjautuminen == null)
+                {
+                    kirjautuminen = new Kirjautuminen
+                    {
+                        Sahkoposti = asiakastiedot.Sahkoposti,
+                        Salasana = asiakastiedot.Salasana,
+                        Taso = 3
+                    };
+                    db.Kirjautuminen.Add(kirjautuminen);
+                }
+
+                // Luo uusi Sijainti-tauluun
+                Sijainti sijainti = new Sijainti
+                {
+                    Osoite = asiakastiedot.Osoite,
+                    Postinro = postinumero.Postinro,
+                };
+                db.Sijainti.Add(sijainti);
+
+                // Luo uusi tietue Asiakastiedot-tauluun
+                Asiakastiedot asiakastieto = new Asiakastiedot
+                {
+                    Etunimi = asiakastiedot.Etunimi,
+                    Sukunimi = asiakastiedot.Sukunimi,
+                    Puhelinnro = asiakastiedot.Puhelinnro,
+                    Osoite = sijainti.Osoite,
+                    Postinro = sijainti.Postinro,
+                    Sahkoposti = kirjautuminen.Sahkoposti,
+                    Salasana = kirjautuminen.Salasana,
+                    SijaintiID = sijainti.SijaintiID,
+                };
+
+                // Lisää Asiakastiedot tietokantaan
+                db.Asiakastiedot.Add(asiakastieto);
+
+                // Tallenna muutokset
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
+            // Jos ModelState ei ole validi, palaa Create-näkymään
             ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Salasana", asiakastiedot.Sahkoposti);
-            ViewBag.SijaintiID = new SelectList(db.Sijainti, "SijaintiID", "Osoite", asiakastiedot.SijaintiID);
             return View(asiakastiedot);
         }
+
 
         // GET: Asiakastiedot/Edit/5
         public ActionResult Edit(int? id)
