@@ -3,14 +3,62 @@
 @{
     ViewBag.Title = "Index";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha384-qzVjFT1aI01L2tJ3l6h8ZqLwTcj3PbrxFp6AlC5jvquSAOuFalUVyJDDb1z9dMEH" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6q8F+cA/Qb5EBqZHP/r5FQ8JLsI0D+Q" crossorigin="anonymous"></script>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".uusiIThenkilotiedotCreate").click(function () {
+                console.log("Luot uudet henkilötiedot");
+                var url = "/IT_tukihenkilot/_CreateModal";
+                console.log(url);
+
+                $("#ithenkilotCreate").append("Avataan ikkunaa...");
+
+                var $detailDivCreate = $("#ithenkilotCreate");
+                $.get(url, function (data) {
+                    $detailDivCreate.replaceWith(data);
+                    $('#uudetIThenkilotCreate').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            $(".haeitHenkiloID").click(function () {
+                let itId = $(this).data("itid");
+                console.log("Klikkasit poistettavaa tilausnumeroa: " + itId);
+                var url = "/IT_tukihenkilot/_DeleteModal/?id=" + itId;
+                console.log(url);
+
+                $("#orderDelete").append(" <b>Avataan tilauksen " + itId + " poistoikkuna...</b>");
+
+                var $detailDivDelete = $("#ITdelete");
+                $.get(url, function (data) {
+                    $detailDivDelete.replaceWith(data);
+                    $('#ModalITDelete').modal('show');
+                });
+            });
+        });
+    </script>
+}
+
+
 
 <h2>Index</h2>
+<div id="ithenkilotCreate"></div>
+<a href="#" id="ithenkilotCreate" class="uusiIThenkilotiedotCreate">
+    <i class="fas fa-plus-circle"></i> Luo uusi IT-tukihenkilötieto
+</a>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div id="ITdelete"></div>
 <table class="table">
     <tr>
+        <th></th>
         <th>
             @Html.DisplayNameFor(model => model.Etunimi)
         </th>
@@ -21,31 +69,45 @@
             @Html.DisplayNameFor(model => model.Puhelinnro)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Kirjautuminen.Sahkoposti)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kirjautuminen.Taso)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Etunimi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sukunimi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Puhelinnro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.itHenkiloID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.itHenkiloID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.itHenkiloID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><button class="haeitHenkiloID fas fa-trash-can" data-itid="@item.itHenkiloID"></button></td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Etunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sukunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Puhelinnro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Sahkoposti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Taso)
+            </td>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.itHenkiloID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.itHenkiloID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.itHenkiloID })
+            </td>*@
+        </tr>
+    }
 
 </table>

@@ -1,0 +1,93 @@
+﻿@model TikettiDB.Models.Asiakastiedot
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha384-qzVjFT1aI01L2tJ3l6h8ZqLwTcj3PbrxFp6AlC5jvquSAOuFalUVyJDDb1z9dMEH" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6q8F+cA/Qb5EBqZHP/r5FQ8JLsI0D+Q" crossorigin="anonymous"></script>
+
+
+<div class="modal fade" id="ModalATDelete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*<div class="bg-img">*@
+            @*Tässä on taustakuva*@
+            <div class="modal-header">
+                <h2>Haluatko varmasti poistaa?</h2>
+            </div>
+            <div class="modal-body">
+
+
+                <div>
+                    <h4>Asiakastiedot</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Etunimi)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Etunimi)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Sukunimi)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Sukunimi)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Puhelinnro)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Puhelinnro)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Sijainti.Osoite)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Sijainti.Osoite)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Sijainti.Postinro)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Sijainti.Postinro)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Kirjautuminen.Sahkoposti)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Kirjautuminen.Sahkoposti)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Kirjautuminen.Salasana)
+                        </dd>
+
+                    </dl>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            <button type="submit" value="Delete" class="btn btn-primary"><i class="fas fa-trash-alt"></i></button>
+                            <a href="@Url.Action("Index", "Asiakastiedot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

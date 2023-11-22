@@ -55,7 +55,7 @@ namespace TikettiDB.Controllers
                     case 1:
                         return RedirectToAction("Index", "Asiakastiedot");
                     case 2:
-                        return RedirectToAction("Index", "IT_tukihenkilot");
+                        return RedirectToAction("Index", "Home");
                     case 3:
                         return RedirectToAction("Index", "Tikettitiedot");
                     default:

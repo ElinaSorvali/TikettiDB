@@ -10,6 +10,7 @@
     @Scripts.Render("~/bundles/chart")
 </head>
 <body>
+   
     @{
         if (Session["Sahkoposti"] == null)
         {
@@ -39,6 +40,7 @@
     @*Sivun alaosassa näkyvä käyttäjätieto ja päivämäärä*@
     <div class="container-fluid">
         @RenderBody()
+        
         <hr />
         <footer class="oma-footer">
             @using System.Globalization

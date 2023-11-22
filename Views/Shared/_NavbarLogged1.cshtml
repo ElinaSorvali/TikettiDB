@@ -1,4 +1,5 @@
 ﻿
+
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
     <div class="container">
         @Html.ActionLink("Pääkäyttäjän näkymä", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -8,7 +9,8 @@
         </button>
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
             <ul class="navbar-nav flex-grow-1">
-                <li>@Html.ActionLink("Luo uusi käyttäjätunnus", "Create", "Asiakastiedot", new { area = "" }, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("IT-tukihenkilöt", "Index", "IT_tukihenkilot", new { area = "" }, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("Asiakastiedot", "Index", "Asiakastiedot", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Etusivu", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Ohje", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Kirjaudu ulos", "LogOut", "Home", new { area = "" }, new { @class = "nav-link" })</li>

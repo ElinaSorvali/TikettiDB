@@ -4,13 +4,63 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha384-qzVjFT1aI01L2tJ3l6h8ZqLwTcj3PbrxFp6AlC5jvquSAOuFalUVyJDDb1z9dMEH" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6q8F+cA/Qb5EBqZHP/r5FQ8JLsI0D+Q" crossorigin="anonymous"></script>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".uusiAsiakastiedotCreate").click(function () {
+                console.log("Luot uudet asiakastiedot");
+                var url = "/Asiakastiedot/_ModalCreate";
+                console.log(url);
+
+                $("#asiakastiedotCreate").append("Avataan ikkunaa...");
+
+                var $detailDivCreate = $("#asiakastiedotCreate");
+                $.get(url, function (data) {
+                    $detailDivCreate.replaceWith(data);
+                    $('#uudetAsiakastiedotCreate').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            $(".haeAsiakasID").click(function () {
+                let atId = $(this).data("atid");
+                console.log("Klikkasit poistettavaa tilausnumeroa: " + atId);
+                var url = "/Asiakastiedot/_ModalDelete/?id=" + atId;
+                console.log(url);
+
+                $("#orderDelete").append(" <b>Avataan tilauksen " + atId + " poistoikkuna...</b>");
+
+                var $detailDivDelete = $("#ATdelete");
+                $.get(url, function (data) {
+                    $detailDivDelete.replaceWith(data);
+                    $('#ModalATDelete').modal('show');
+                });
+            });
+        });
+    </script>
+}
+
+
+
+<h2>Index</h2>
+<div id="asiakastiedotCreate"></div>
+<a href="#" id="asiakastiedotCreate" class="uusiAsiakastiedotCreate">
+    <i class="fas fa-plus-circle"></i> Luo uusi Asiakastieto
+</a>
+
+<div id="ATdelete"></div>
 <table class="table">
     <tr>
+        <th></th>
         <th>
             @Html.DisplayNameFor(model => model.Etunimi)
         </th>
@@ -21,37 +71,58 @@
             @Html.DisplayNameFor(model => model.Puhelinnro)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
+            @Html.DisplayNameFor(model => model.Sijainti.Osoite)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Sijainti.Osoite)
+            @Html.DisplayNameFor(model => model.Sijainti.Postinro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Postinumero.Postitmp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kirjautuminen.Sahkoposti)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Etunimi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sukunimi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Puhelinnro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sijainti.Osoite)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AsiakasID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AsiakasID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AsiakasID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><button class="haeAsiakasID fas fa-trash-can" data-atid="@item.AsiakasID"></button></td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Etunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sukunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Puhelinnro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sijainti.Osoite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sijainti.Postinro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Postinumero.Postitmp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Sahkoposti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
+            </td>
+
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.AsiakasID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.AsiakasID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.AsiakasID })
+            </td>*@
+        </tr>
+    }
 
 </table>
