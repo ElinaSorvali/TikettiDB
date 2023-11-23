@@ -28,6 +28,23 @@
             });
         });
 
+        //$(function () {
+        //    $(".edititHenkiloID").click(function () {
+        //        let itId = $(this).data("itid");
+        //        console.log("Klikkasit muokattavaa tilausnumeroa: " + itId);
+        //        var url = "/IT_tukihenkilot/_EditModal/?id=" + itId;
+        //        console.log(url);
+
+        //        $("#orderEdit").append(" <b>Avataan tilauksen " + itId + " muokkausikkuna...</b>");
+
+        //        var $detailDivEdit = $("#ITedit");
+        //        $.get(url, function (data) {
+        //            $detailDivEdit.replaceWith(data);
+        //            $('#ModalITEdit').modal('show');
+        //        });
+        //    });
+        //});
+
         $(function () {
             $(".haeitHenkiloID").click(function () {
                 let itId = $(this).data("itid");
@@ -56,6 +73,7 @@
 </a>
 
 <div id="ITdelete"></div>
+@*<div id="ITedit"></div>*@
 <table class="table">
     <tr>
         <th></th>
@@ -83,7 +101,10 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td><button class="haeitHenkiloID fas fa-trash-can" data-itid="@item.itHenkiloID"></button></td>
+            <td>
+                @*<button class="edititHenkiloID fas fa-edit" data-itid="@item.itHenkiloID"></button>*@
+                <button class="haeitHenkiloID fas fa-trash-can" data-itid="@item.itHenkiloID"></button>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Etunimi)
             </td>
@@ -104,7 +125,6 @@
             </td>
             @*<td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.itHenkiloID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.itHenkiloID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.itHenkiloID })
             </td>*@
         </tr>

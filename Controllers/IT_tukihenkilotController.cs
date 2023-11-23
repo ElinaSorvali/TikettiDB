@@ -38,37 +38,6 @@ namespace TikettiDB.Controllers
             return View(iT_tukihenkilot.ToList());
         }
 
-        // GET: IT_tukihenkilot/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (Session["Sahkoposti"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
-
-            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
-            if (userLevel == 1)
-            {
-                // Käyttäjällä on oikeus kaikkiin sivuihin
-            }
-            else if (userLevel == 2 || userLevel == 3)
-            {
-                // Käyttäjällä on taso 2 tai 3, estä pääsy haluamillesi sivuille
-                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
-                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
-            }
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            IT_tukihenkilot iT_tukihenkilot = db.IT_tukihenkilot.Find(id);
-            if (iT_tukihenkilot == null)
-            {
-                return HttpNotFound();
-            }
-            return View(iT_tukihenkilot);
-        }
 
         // GET: IT_tukihenkilot/Create
         public ActionResult Create()
@@ -137,7 +106,7 @@ namespace TikettiDB.Controllers
             return View(iT_tukihenkilot);
         }
 
-
+        //POISTA TÄMÄ JOS POISTAT EDITIN KOKONAAN
         // GET: IT_tukihenkilot/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -167,8 +136,23 @@ namespace TikettiDB.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Sahkoposti", iT_tukihenkilot.Sahkoposti);
+            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Taso", "Taso", iT_tukihenkilot.Taso);
             return View(iT_tukihenkilot);
+        }
+
+        public ActionResult _EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            IT_tukihenkilot iT_tukihenkilot = db.IT_tukihenkilot.Find(id);
+            if (iT_tukihenkilot == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Taso", "Taso", iT_tukihenkilot.Taso);
+            return PartialView(iT_tukihenkilot);
         }
 
         // POST: IT_tukihenkilot/Edit/5
@@ -176,17 +160,43 @@ namespace TikettiDB.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "itHenkiloID,Etunimi,Sukunimi,Puhelinnro,Sahkoposti")] IT_tukihenkilot iT_tukihenkilot)
+        public ActionResult Edit([Bind(Include = "itHenkiloID,Etunimi,Sukunimi,Puhelinnro,Sahkoposti,Salasana,Taso")] IT_tukihenkilot iT_tukihenkilot)
         {
             if (ModelState.IsValid)
             {
+                // Päivitä Kirjautuminen-olio
+                Kirjautuminen kirjautuminen = db.Kirjautuminen.SingleOrDefault(k => k.Sahkoposti == iT_tukihenkilot.Sahkoposti);
+
+                if (kirjautuminen == null)
+                {
+                    // Jos ei ole olemassa, lisää uusi Kirjautuminen, JÄTTÄÄ VANHAN MAILIN KIRJAUTUMISTAULUUN
+                    db.Kirjautuminen.Add(new Kirjautuminen
+                    {
+                        Sahkoposti = iT_tukihenkilot.Sahkoposti,
+                        Salasana = iT_tukihenkilot.Salasana,
+                        Taso = iT_tukihenkilot.Taso
+                    });
+                }
+                else
+                {
+                    // Jos on olemassa, päivitä tiedot
+                    kirjautuminen.Salasana = iT_tukihenkilot.Salasana;
+                    kirjautuminen.Taso = iT_tukihenkilot.Taso;
+                }
+
+                // Päivitä IT_tukihenkilot-olio
                 db.Entry(iT_tukihenkilot).State = EntityState.Modified;
+
+                // Tallenna muutokset
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
+
             ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Sahkoposti", iT_tukihenkilot.Sahkoposti);
             return View(iT_tukihenkilot);
         }
+
 
         // GET: IT_tukihenkilot/Delete/5
         public ActionResult Delete(int? id)

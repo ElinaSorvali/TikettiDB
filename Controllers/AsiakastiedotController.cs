@@ -71,42 +71,6 @@ namespace TikettiDB.Controllers
             return View(asiakastiedot);
         }
 
-
-
-
-
-        // GET: Asiakastiedot/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (Session["Sahkoposti"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
-
-            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
-            if (userLevel == 1)
-            {
-                // Käyttäjällä on oikeus kaikkiin sivuihin
-            }
-            else if (userLevel == 2 || userLevel == 3)
-            {
-                // Käyttäjällä on taso 2 tai 3, estä pääsy haluamillesi sivuille
-                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
-                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
-            }
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
-            if (asiakastiedot == null)
-            {
-                return HttpNotFound();
-            }
-            return View(asiakastiedot);
-        }
-
         // GET: Asiakastiedot/Create
         public ActionResult Create()
         {
@@ -206,7 +170,7 @@ namespace TikettiDB.Controllers
             return View(asiakastiedot);
         }
 
-
+        //POISTA TÄMÄ JOS POISTAT EDITIN KOKONAAN
         // GET: Asiakastiedot/Edit/5
         public ActionResult Edit(int? id)
         {

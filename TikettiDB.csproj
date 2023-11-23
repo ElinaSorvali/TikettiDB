@@ -308,6 +308,7 @@
     <Content Include="Views\IT_tukihenkilot\_CreateModal.cshtml" />
     <Content Include="Views\Asiakastiedot\_ModalDelete.cshtml" />
     <Content Include="Views\IT_tukihenkilot\_DeleteModal.cshtml" />
+    <Content Include="Views\IT_tukihenkilot\_EditModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
