@@ -312,6 +312,7 @@
     <Content Include="Views\Tikettitiedot\Index2.cshtml" />
     <Content Include="Views\Tikettitiedot\Kuittaus.cshtml" />
     <Content Include="Views\Tikettitiedot\Tiketti.cshtml" />
+    <Content Include="Views\Tikettitiedot\Create2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

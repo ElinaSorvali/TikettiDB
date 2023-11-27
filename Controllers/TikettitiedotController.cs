@@ -44,7 +44,7 @@ namespace TikettiDB.Controllers
             return View(tikettitiedot);
         }
 
-        // GET: Tikettitiedot/Create
+        // Laiteongelman create
         public ActionResult Create()
         {
             ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro");
@@ -63,7 +63,7 @@ namespace TikettiDB.Controllers
 
                 if (asiakastiedot == null)
                 {
-                    // Jos asiakasta ei löydy, voit tehdä jotain tarvittavaa, esimerkiksi antaa virheviestin
+                    // Jos asiakasta ei löydy, voit antaa virheviestin
                     ModelState.AddModelError("", "Asiakasta ei löytynyt annetuilla tiedoilla.");
                     return View(tikettitiedot);
                 }
@@ -73,7 +73,7 @@ namespace TikettiDB.Controllers
 
                 if (sijainti == null)
                 {
-                    // Jos sijaintia ei löydy, voit tehdä jotain tarvittavaa, esimerkiksi antaa virheviestin
+                    // Jos sijaintia ei löydy, voit antaa virheviestin
                     ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
                     return View(tikettitiedot);
                 }
@@ -87,7 +87,7 @@ namespace TikettiDB.Controllers
 
                     if (sijaintiLaitteelle == null)
                     {
-                        // Jos sijaintia ei löydy, voit tehdä jotain tarvittavaa, esimerkiksi antaa virheviestin
+                        // Jos sijaintia ei löydy, voit antaa virheviestin
                         ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
                         return View(tikettitiedot);
                     }
@@ -131,6 +131,104 @@ namespace TikettiDB.Controllers
                 return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
             }
             ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro", tikettitiedot.Postinro);
+
+            return View(tikettitiedot);
+        }
+
+        // Yhteysongelman create
+        public ActionResult Create2()
+        {
+            ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro");
+            ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi");
+            return View();
+        }
+
+        // POST: Tiketti/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create2([Bind(Include = "Etunimi,Sukunimi,Sahkoposti,Osoite,Postinro,Laitteen_nimi,Ongelman_kuvaus,Yhteyden_tyyppi")] Tikettitiedot tikettitiedot)
+        {
+            if (ModelState.IsValid)
+            {
+                // Etsi Asiakastiedot-taulusta
+                Asiakastiedot asiakastiedot = db.Asiakastiedot.SingleOrDefault(a => a.Sahkoposti == tikettitiedot.Sahkoposti);
+
+                if (asiakastiedot == null)
+                {
+                    // Jos asiakasta ei löydy, voit antaa virheviestin
+                    ModelState.AddModelError("", "Asiakasta ei löytynyt annetuilla tiedoilla.");
+                    return View(tikettitiedot);
+                }
+
+                // Etsi Sijainti-taulusta
+                Sijainti sijainti = db.Sijainti.SingleOrDefault(s => s.Osoite == tikettitiedot.Osoite && s.Postinro == tikettitiedot.Postinro);
+
+                if (sijainti == null)
+                {
+                    // Jos sijaintia ei löydy, voit antaa virheviestin
+                    ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
+                    return View(tikettitiedot);
+                }
+
+                LaitteenTyyppi uusiLaitteenTyyppi = db.LaitteenTyyppi.SingleOrDefault(l => l.Laitteen_nimi == tikettitiedot.Laitteen_nimi);
+
+                if (uusiLaitteenTyyppi == null)
+                {
+                    // Jos laitetyyppiä ei löydy, luo uusi
+                    Sijainti sijaintiLaitteelle = db.Sijainti.SingleOrDefault(s => s.Osoite == tikettitiedot.Osoite && s.Postinro == tikettitiedot.Postinro);
+
+                    if (sijaintiLaitteelle == null)
+                    {
+                        // Jos sijaintia ei löydy, voit antaa virheviestin
+                        ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
+                        return View(tikettitiedot);
+                    }
+
+                    uusiLaitteenTyyppi = new LaitteenTyyppi
+                    {
+                        Laitteen_nimi = tikettitiedot.Laitteen_nimi,
+                        SijaintiID = sijaintiLaitteelle.SijaintiID
+                        // Lisää mahdolliset muut tarvittavat tiedot
+                    };
+
+                    db.LaitteenTyyppi.Add(uusiLaitteenTyyppi);
+                    db.SaveChanges(); // Tallenna muutokset LaitteenTyyppi-tauluun
+                }
+
+                // Hae oikea YhteysID valitun pudotusvalikon perusteella
+                tikettitiedot.YhteysID = db.YhteydenTyyppi
+                    .Where(y => y.Yhteyden_tyyppi == tikettitiedot.Yhteyden_tyyppi)
+                    .Select(y => y.YhteysID)
+                    .FirstOrDefault();
+
+                // Luo uusi tieto Asiakastiedot-tauluun
+                Tikettitiedot tikettitieto = new Tikettitiedot
+                {
+                    Etunimi = asiakastiedot.Etunimi,
+                    Sukunimi = asiakastiedot.Sukunimi,
+                    Puhelinnro = asiakastiedot.Puhelinnro,
+                    Osoite = sijainti.Osoite,
+                    Postinro = sijainti.Postinro,
+                    Sahkoposti = tikettitiedot.Sahkoposti,
+                    Laitteen_nimi = uusiLaitteenTyyppi.Laitteen_nimi,
+                    Ongelman_kuvaus = tikettitiedot.Ongelman_kuvaus,
+                    AsiakasID = asiakastiedot.AsiakasID,
+                    YhteysID = tikettitiedot.YhteysID,
+                    itHenkiloID = 2000,
+                    PVM = DateTime.UtcNow,  // Aseta PVM nykyhetkeen
+                    LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID
+                };
+
+                // Lisää Tikettitiedot tietokantaan
+                db.Tikettitiedot.Add(tikettitieto);
+
+                // Tallenna muutokset
+                db.SaveChanges();
+
+                return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
+            }
+            ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro", tikettitiedot.Postinro);
+            ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi", tikettitiedot.Yhteyden_tyyppi);
 
             return View(tikettitiedot);
         }
