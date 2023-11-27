@@ -27,6 +27,23 @@ namespace TikettiDB.Controllers
             
         }
 
+        public ActionResult About()
+        {
+            //Statukset kirjautumistilanteen mukaan ja toinen status yläpalkkia varten
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
+                string userName = Session["Sahkoposti"].ToString();
+                ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
+                return View();
+            }
+
+        }
+
         public ActionResult Login()
         {
             return View();

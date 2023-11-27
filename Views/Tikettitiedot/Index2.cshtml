@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Tästä tulee IT-puolen uusi tiketti-sivu</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PVM)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ongelman_kuvaus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Asiakastiedot.Etunimi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IT_tukihenkilot.Etunimi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LaitteenTyyppi.Laitteen_nimi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YhteydenTyyppi.Yhteyden_tyyppi)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PVM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Etunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YhteydenTyyppi.Yhteyden_tyyppi)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TikettiID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.TikettiID })
+            </td>
+        </tr>
+    }
+
+</table>
