@@ -69,6 +69,7 @@
           <Property Name="Ongelman kuvaus" Type="nchar" MaxLength="1000" Nullable="false" />
           <Property Name="itHenkiloID" Type="int" Nullable="false" />
           <Property Name="RatkaisunKuvaus" Type="nchar" MaxLength="1000" />
+          <Property Name="Status" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="YhteydenTyyppi">
           <Key>
@@ -316,6 +317,7 @@
           <NavigationProperty Name="LaitteenTyyppi" Relationship="Self.FK_Tikettitiedot_LaitteenTyyppi" FromRole="Tikettitiedot" ToRole="LaitteenTyyppi" />
           <NavigationProperty Name="YhteydenTyyppi" Relationship="Self.FK_Tikettitiedot_YhteydenTyyppi" FromRole="Tikettitiedot" ToRole="YhteydenTyyppi" />
           <Property Name="RatkaisunKuvaus" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="YhteydenTyyppi">
           <Key>
@@ -546,6 +548,7 @@
           <EntitySetMapping Name="Tikettitiedot">
             <EntityTypeMapping TypeName="TikettiDBModel.Tikettitiedot">
               <MappingFragment StoreEntitySet="Tikettitiedot">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="RatkaisunKuvaus" ColumnName="RatkaisunKuvaus" />
                 <ScalarProperty Name="TikettiID" ColumnName="TikettiID" />
                 <ScalarProperty Name="YhteysID" ColumnName="YhteysID" />

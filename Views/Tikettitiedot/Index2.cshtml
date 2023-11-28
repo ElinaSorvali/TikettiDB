@@ -28,8 +28,9 @@
             Laitteen nimi
         </th>
         <th>
-            Ratkaisun kuvaus
+            Status
         </th>
+
         <th></th>
     </tr>
 
@@ -55,8 +56,9 @@
                 @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
+
 
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.TikettiID }) |

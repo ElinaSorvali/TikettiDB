@@ -25,8 +25,20 @@ namespace TikettiDB.Controllers
 
         public ActionResult Index2()
         {
-            var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
-            return View(tikettitiedot.ToList());
+
+            //var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
+            //return View(tikettitiedot.ToList());
+
+                var tikettitiedot = db.Tikettitiedot
+                    .Where(t => t.Status == "Uusi")
+                    .Include(t => t.Asiakastiedot)
+                    .Include(t => t.IT_tukihenkilot)
+                    .Include(t => t.LaitteenTyyppi)
+                    .Include(t => t.YhteydenTyyppi)
+                    .ToList();
+
+                return View(tikettitiedot.ToList());
+
         }
 
         // GET: Tikettitiedot/Details/5
@@ -58,6 +70,7 @@ namespace TikettiDB.Controllers
         {
             if (ModelState.IsValid)
             {
+                tikettitiedot.Status = "Uusi";
                 // Etsi Asiakastiedot-taulusta
                 Asiakastiedot asiakastiedot = db.Asiakastiedot.SingleOrDefault(a => a.Sahkoposti == tikettitiedot.Sahkoposti);
 
@@ -119,7 +132,9 @@ namespace TikettiDB.Controllers
                     YhteysID = 10001, // Aseta YhteysID haluamallesi arvolle
                     itHenkiloID = 2000,
                     PVM = DateTime.UtcNow,  // Aseta PVM nykyhetkeen
-                    LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID
+                    LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID,
+                    Status = tikettitiedot.Status
+                 
                 };
 
                 // Lisää Tikettitiedot tietokantaan
@@ -246,8 +261,9 @@ namespace TikettiDB.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.AsiakasID = new SelectList(db.Asiakastiedot, "AsiakasID", "Etunimi", tikettitiedot.AsiakasID);
-            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Etunimi", tikettitiedot.itHenkiloID);
+            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
             ViewBag.LaitenumeroID = new SelectList(db.LaitteenTyyppi, "LaitenumeroID", "Laitteen_nimi", tikettitiedot.LaitenumeroID);
             ViewBag.YhteysID = new SelectList(db.YhteydenTyyppi, "YhteysID", "Yhteyden_tyyppi", tikettitiedot.YhteysID);
             return View(tikettitiedot);
@@ -267,7 +283,7 @@ namespace TikettiDB.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.AsiakasID = new SelectList(db.Asiakastiedot, "AsiakasID", "Etunimi", tikettitiedot.AsiakasID);
-            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Etunimi", tikettitiedot.itHenkiloID);
+            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
             ViewBag.LaitenumeroID = new SelectList(db.LaitteenTyyppi, "LaitenumeroID", "Laitteen_nimi", tikettitiedot.LaitenumeroID);
             ViewBag.YhteysID = new SelectList(db.YhteydenTyyppi, "YhteysID", "Yhteyden_tyyppi", tikettitiedot.YhteysID);
             return View(tikettitiedot);
