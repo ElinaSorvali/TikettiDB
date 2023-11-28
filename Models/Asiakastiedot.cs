@@ -11,7 +11,7 @@ namespace TikettiDB.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Asiakastiedot
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +19,7 @@ namespace TikettiDB.Models
         {
             this.Tikettitiedot = new HashSet<Tikettitiedot>();
         }
-    
+
         public int AsiakasID { get; set; }
         public string Etunimi { get; set; }
         public string Sukunimi { get; set; }
@@ -29,7 +29,7 @@ namespace TikettiDB.Models
         public string Postinro { get; set; }
         public string Salasana { get; set; }
         public int SijaintiID { get; set; }
-    
+
         public virtual Kirjautuminen Kirjautuminen { get; set; }
         public virtual Sijainti Sijainti { get; set; }
         public virtual Postinumero Postinumero { get; set; }

@@ -301,8 +301,7 @@ namespace TikettiDB.Controllers
 
         public ActionResult Tiketti()
         {
-            var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
-            return View(tikettitiedot.ToList());
+            return View();
         }
 
         public ActionResult Kuittaus(int? TikettiID)

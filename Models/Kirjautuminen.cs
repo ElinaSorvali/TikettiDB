@@ -28,7 +28,7 @@ namespace TikettiDB.Models
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Anna salasana!")]
         public string Salasana { get; set; }
-        
+
         public int Taso { get; set; }
         public string LoginErrorMessage { get; set; }
 

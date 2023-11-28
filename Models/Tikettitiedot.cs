@@ -11,7 +11,7 @@ namespace TikettiDB.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Tikettitiedot
     {
         public string Etunimi { get; set; }
@@ -29,6 +29,7 @@ namespace TikettiDB.Models
         public string Ongelman_kuvaus { get; set; }
         public int? itHenkiloID { get; set; }
         public string Yhteyden_tyyppi { get; set; }
+        public string RatkaisunKuvaus { get; set; }
 
         public virtual Asiakastiedot Asiakastiedot { get; set; }
         public virtual IT_tukihenkilot IT_tukihenkilot { get; set; }

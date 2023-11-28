@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TikettiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TikettiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Asiakastiedot">
           <Key>
             <PropertyRef Name="AsiakasID" />
@@ -68,6 +68,7 @@
           <Property Name="PVM" Type="date" Nullable="false" />
           <Property Name="Ongelman kuvaus" Type="nchar" MaxLength="1000" Nullable="false" />
           <Property Name="itHenkiloID" Type="int" Nullable="false" />
+          <Property Name="RatkaisunKuvaus" Type="nchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="YhteydenTyyppi">
           <Key>
@@ -230,8 +231,7 @@
             <End Role="Tikettitiedot" EntitySet="Tikettitiedot" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TikettiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -315,6 +315,7 @@
           <NavigationProperty Name="IT_tukihenkilot" Relationship="Self.FK_Tikettitiedot_IT_tukihenkilot" FromRole="Tikettitiedot" ToRole="IT_tukihenkilot" />
           <NavigationProperty Name="LaitteenTyyppi" Relationship="Self.FK_Tikettitiedot_LaitteenTyyppi" FromRole="Tikettitiedot" ToRole="LaitteenTyyppi" />
           <NavigationProperty Name="YhteydenTyyppi" Relationship="Self.FK_Tikettitiedot_YhteydenTyyppi" FromRole="Tikettitiedot" ToRole="YhteydenTyyppi" />
+          <Property Name="RatkaisunKuvaus" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="YhteydenTyyppi">
           <Key>
@@ -545,6 +546,7 @@
           <EntitySetMapping Name="Tikettitiedot">
             <EntityTypeMapping TypeName="TikettiDBModel.Tikettitiedot">
               <MappingFragment StoreEntitySet="Tikettitiedot">
+                <ScalarProperty Name="RatkaisunKuvaus" ColumnName="RatkaisunKuvaus" />
                 <ScalarProperty Name="TikettiID" ColumnName="TikettiID" />
                 <ScalarProperty Name="YhteysID" ColumnName="YhteysID" />
                 <ScalarProperty Name="LaitenumeroID" ColumnName="LaitenumeroID" />

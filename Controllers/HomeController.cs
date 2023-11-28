@@ -70,9 +70,9 @@ namespace TikettiDB.Controllers
                 {
                     //Tässä on vain esimerkkisivut, jotka pitää muuttaa kun sivut ovat olemassa
                     case 1:
-                        return RedirectToAction("Index", "Asiakastiedot");
+                        return RedirectToAction("Tiketti", "Tikettitiedot");
                     case 2:
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Tiketti", "Tikettitiedot");
                     case 3:
                         return RedirectToAction("Index", "Tikettitiedot");
                     default:
