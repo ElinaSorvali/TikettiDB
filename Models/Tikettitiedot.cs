@@ -28,7 +28,7 @@ namespace TikettiDB.Models
         public int AsiakasID { get; set; }
         public System.DateTime PVM { get; set; }
         public string Ongelman_kuvaus { get; set; }
-        public int? itHenkiloID { get; set; }
+        public int itHenkiloID { get; set; }
         public string Yhteyden_tyyppi { get; set; }
         public string RatkaisunKuvaus { get; set; }
         public string Status { get; set; }

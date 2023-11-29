@@ -309,10 +309,12 @@
     <Content Include="Views\Asiakastiedot\_ModalDelete.cshtml" />
     <Content Include="Views\IT_tukihenkilot\_DeleteModal.cshtml" />
     <Content Include="Views\IT_tukihenkilot\_EditModal.cshtml" />
-    <Content Include="Views\Tikettitiedot\Index2.cshtml" />
+    <Content Include="Views\Tikettitiedot\Tiketti1.cshtml" />
     <Content Include="Views\Tikettitiedot\Kuittaus.cshtml" />
     <Content Include="Views\Tikettitiedot\Tiketti.cshtml" />
     <Content Include="Views\Tikettitiedot\Create2.cshtml" />
+    <Content Include="Views\Tikettitiedot\Tiketti2.cshtml" />
+    <Content Include="Views\Tikettitiedot\Tiketti3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

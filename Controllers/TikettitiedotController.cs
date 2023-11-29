@@ -23,23 +23,50 @@ namespace TikettiDB.Controllers
             return View(tikettitiedot.ToList());
         }
 
-        public ActionResult Index2()
+        public ActionResult Tiketti1()
         {
 
             //var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
             //return View(tikettitiedot.ToList());
 
-                var tikettitiedot = db.Tikettitiedot
-                    .Where(t => t.Status == "Uusi")
-                    .Include(t => t.Asiakastiedot)
-                    .Include(t => t.IT_tukihenkilot)
-                    .Include(t => t.LaitteenTyyppi)
-                    .Include(t => t.YhteydenTyyppi)
-                    .ToList();
+            var tikettitiedot = db.Tikettitiedot
+                .Where(t => t.Status == "Uusi")
+                .Include(t => t.Asiakastiedot)
+                .Include(t => t.IT_tukihenkilot)
+                .Include(t => t.LaitteenTyyppi)
+                .Include(t => t.YhteydenTyyppi)
+                .ToList();
 
-                return View(tikettitiedot.ToList());
+            return View(tikettitiedot.ToList());
 
         }
+
+        public ActionResult Tiketti2()
+        {
+            var keskenOlevatTiketit = db.Tikettitiedot
+                .Where(t => t.Status == "Kesken")
+                .Include(t => t.Asiakastiedot)
+                .Include(t => t.IT_tukihenkilot)
+                .Include(t => t.LaitteenTyyppi)
+                .Include(t => t.YhteydenTyyppi)
+                .ToList();
+
+            return View(keskenOlevatTiketit);
+        }
+
+        public ActionResult Tiketti3()
+        {
+            var keskenOlevatTiketit = db.Tikettitiedot
+                .Where(t => t.Status == "Valmis")
+                .Include(t => t.Asiakastiedot)
+                .Include(t => t.IT_tukihenkilot)
+                .Include(t => t.LaitteenTyyppi)
+                .Include(t => t.YhteydenTyyppi)
+                .ToList();
+
+            return View(keskenOlevatTiketit);
+        }
+
 
         // GET: Tikettitiedot/Details/5
         public ActionResult Details(int? id)
@@ -116,7 +143,7 @@ namespace TikettiDB.Controllers
                     db.SaveChanges(); // Tallenna muutokset LaitteenTyyppi-tauluun
                 }
 
-               
+
                 // Luo uusi tieto Asiakastiedot-tauluun
                 Tikettitiedot tikettitieto = new Tikettitiedot
                 {
@@ -134,7 +161,7 @@ namespace TikettiDB.Controllers
                     PVM = DateTime.UtcNow,  // Aseta PVM nykyhetkeen
                     LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID,
                     Status = tikettitiedot.Status
-                 
+
                 };
 
                 // Lisää Tikettitiedot tietokantaan
@@ -158,13 +185,14 @@ namespace TikettiDB.Controllers
             return View();
         }
 
-        // POST: Tiketti/Create
+        // POST: Tiketti/Create2
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create2([Bind(Include = "Etunimi,Sukunimi,Sahkoposti,Osoite,Postinro,Laitteen_nimi,Ongelman_kuvaus,Yhteyden_tyyppi")] Tikettitiedot tikettitiedot)
         {
             if (ModelState.IsValid)
             {
+                tikettitiedot.Status = "Uusi";
                 // Etsi Asiakastiedot-taulusta
                 Asiakastiedot asiakastiedot = db.Asiakastiedot.SingleOrDefault(a => a.Sahkoposti == tikettitiedot.Sahkoposti);
 
@@ -216,7 +244,7 @@ namespace TikettiDB.Controllers
                     .Select(y => y.YhteysID)
                     .FirstOrDefault();
 
-                // Luo uusi tieto Asiakastiedot-tauluun
+                // Luo uusi tieto
                 Tikettitiedot tikettitieto = new Tikettitiedot
                 {
                     Etunimi = asiakastiedot.Etunimi,
@@ -231,7 +259,8 @@ namespace TikettiDB.Controllers
                     YhteysID = tikettitiedot.YhteysID,
                     itHenkiloID = 2000,
                     PVM = DateTime.UtcNow,  // Aseta PVM nykyhetkeen
-                    LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID
+                    LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID,
+                    Status = tikettitiedot.Status
                 };
 
                 // Lisää Tikettitiedot tietokantaan
@@ -261,33 +290,57 @@ namespace TikettiDB.Controllers
             {
                 return HttpNotFound();
             }
-
-            ViewBag.AsiakasID = new SelectList(db.Asiakastiedot, "AsiakasID", "Etunimi", tikettitiedot.AsiakasID);
+            ViewBag.Status = new SelectList(db.Tikettitiedot, "Status", "Status", tikettitiedot.Status);
             ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
-            ViewBag.LaitenumeroID = new SelectList(db.LaitteenTyyppi, "LaitenumeroID", "Laitteen_nimi", tikettitiedot.LaitenumeroID);
-            ViewBag.YhteysID = new SelectList(db.YhteydenTyyppi, "YhteysID", "Yhteyden_tyyppi", tikettitiedot.YhteysID);
             return View(tikettitiedot);
         }
 
         // POST: Tikettitiedot/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TikettiID,YhteysID,LaitenumeroID,AsiakasID,PVM,Ongelman_kuvaus,itHenkiloID")] Tikettitiedot tikettitiedot)
+        public ActionResult Edit([Bind(Include = "TikettiID,RatkaisunKuvaus,Sahkoposti,Status")] Tikettitiedot tikettitiedot)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tikettitiedot).State = EntityState.Modified;
+                // Etsi olemassa oleva Tikettitiedot-tietue tietokannasta
+                Tikettitiedot vanhaTiketti = db.Tikettitiedot.Find(tikettitiedot.TikettiID);
+
+                if (vanhaTiketti == null)
+                {
+                    ModelState.AddModelError("", "Tikettiä ei löytynyt annetulla TikettiID:llä.");
+                    return View(tikettitiedot);
+                }
+
+                // Päivitä halutut kentät
+                vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
+                vanhaTiketti.Status = tikettitiedot.Status;
+
+                // Päivitä muutettu tietue tietokantaan
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Siirry Tiketti-sivulle, jos Status on päivitetty
+                if (tikettitiedot.Status == "Uusi")
+                {
+                    return RedirectToAction("Tiketti1");
+                }
+                if (tikettitiedot.Status == "Kesken")
+                {
+                    return RedirectToAction("Tiketti2");
+                }
+                if (tikettitiedot.Status == "Valmis")
+                {
+                    return RedirectToAction("Tiketti3");
+                }
             }
-            ViewBag.AsiakasID = new SelectList(db.Asiakastiedot, "AsiakasID", "Etunimi", tikettitiedot.AsiakasID);
+
+            // Voit jättää ViewBag.Status ja ViewBag.itHenkiloID -koodin samaksi
+            ViewBag.Status = new SelectList(db.Tikettitiedot, "Status", "Status", tikettitiedot.Status);
             ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
-            ViewBag.LaitenumeroID = new SelectList(db.LaitteenTyyppi, "LaitenumeroID", "Laitteen_nimi", tikettitiedot.LaitenumeroID);
-            ViewBag.YhteysID = new SelectList(db.YhteydenTyyppi, "YhteysID", "Yhteyden_tyyppi", tikettitiedot.YhteysID);
+
+            // Palaa näkymään, jos mallin tila ei ole kelvollinen
             return View(tikettitiedot);
         }
+
 
         // GET: Tikettitiedot/Delete/5
         public ActionResult Delete(int? id)
@@ -312,7 +365,7 @@ namespace TikettiDB.Controllers
             Tikettitiedot tikettitiedot = db.Tikettitiedot.Find(id);
             db.Tikettitiedot.Remove(tikettitiedot);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Tiketti");
         }
 
         public ActionResult Tiketti()

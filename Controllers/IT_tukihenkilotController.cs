@@ -193,7 +193,7 @@ namespace TikettiDB.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Sahkoposti", "Sahkoposti", iT_tukihenkilot.Sahkoposti);
+            ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Taso", "Taso", iT_tukihenkilot.Sahkoposti);
             return View(iT_tukihenkilot);
         }
 

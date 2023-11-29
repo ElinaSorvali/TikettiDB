@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
 
 @{
-    ViewBag.Title = "Index2";
+    ViewBag.Title = "Tiketti3";
 }
 
-<h2>Uudet tiketit</h2>
+<h2>Valmiit tiketit</h2>
 
 
 <table class="table">
@@ -20,6 +20,9 @@
         </th>
         <th>
             Asiakkaan nimi
+        </th>
+        <th>
+            Asiakkaan sähköposti
         </th>
         <th>
             Ongelman kuvaus
@@ -50,6 +53,9 @@
                 @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Sahkoposti)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
             </td>
             <td>
@@ -61,11 +67,13 @@
 
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.TikettiID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |
+                @*@Html.ActionLink("Tee tiketti valmiiksi", "Edit", new { id = item.TikettiID })
+                    @Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |*@
                 @Html.ActionLink("Delete", "Delete", new { id = item.TikettiID })
             </td>
         </tr>
     }
 
 </table>
+
+

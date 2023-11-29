@@ -1,0 +1,77 @@
+﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
+
+@{
+    ViewBag.Title = "Tiketti1";
+}
+
+<h2>Uudet tiketit</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TikettiID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PVM)
+        </th>
+        <th>
+            Yhteyden tyyppi
+        </th>
+        <th>
+            Asiakkaan nimi
+        </th>
+        <th>
+            Asiakkaan sähköposti
+        </th>
+        <th>
+            Ongelman kuvaus
+        </th>
+        <th>
+            Laitteen nimi
+        </th>
+        <th>
+            Status
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TikettiID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PVM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YhteydenTyyppi.Yhteyden_tyyppi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Sahkoposti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+
+            <td>
+                @Html.ActionLink("Ota tiketti käsittelyyn", "Edit", new { id = item.TikettiID })
+                @*@Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.TikettiID })*@
+            </td>
+        </tr>
+    }
+
+</table>
