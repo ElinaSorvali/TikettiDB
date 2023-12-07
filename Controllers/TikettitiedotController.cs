@@ -26,9 +26,6 @@ namespace TikettiDB.Controllers
         public ActionResult Tiketti1()
         {
 
-            //var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
-            //return View(tikettitiedot.ToList());
-
             var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Uusi")
                 .Include(t => t.Asiakastiedot)
@@ -43,7 +40,7 @@ namespace TikettiDB.Controllers
 
         public ActionResult Tiketti2()
         {
-            var keskenOlevatTiketit = db.Tikettitiedot
+            var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Kesken")
                 .Include(t => t.Asiakastiedot)
                 .Include(t => t.IT_tukihenkilot)
@@ -51,12 +48,12 @@ namespace TikettiDB.Controllers
                 .Include(t => t.YhteydenTyyppi)
                 .ToList();
 
-            return View(keskenOlevatTiketit);
+            return View(tikettitiedot.ToList());
         }
 
         public ActionResult Tiketti3()
         {
-            var keskenOlevatTiketit = db.Tikettitiedot
+            var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Valmis")
                 .Include(t => t.Asiakastiedot)
                 .Include(t => t.IT_tukihenkilot)
@@ -64,7 +61,7 @@ namespace TikettiDB.Controllers
                 .Include(t => t.YhteydenTyyppi)
                 .ToList();
 
-            return View(keskenOlevatTiketit);
+            return View(tikettitiedot.ToList());
         }
 
 
@@ -302,6 +299,7 @@ namespace TikettiDB.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 // Etsi olemassa oleva Tikettitiedot-tietue tietokannasta
                 Tikettitiedot vanhaTiketti = db.Tikettitiedot.Find(tikettitiedot.TikettiID);
 
@@ -319,21 +317,17 @@ namespace TikettiDB.Controllers
                 db.SaveChanges();
 
                 // Siirry Tiketti-sivulle, jos Status on päivitetty
-                if (tikettitiedot.Status == "Uusi")
+                switch (tikettitiedot.Status)
                 {
-                    return RedirectToAction("Tiketti1");
-                }
-                if (tikettitiedot.Status == "Kesken")
-                {
-                    return RedirectToAction("Tiketti2");
-                }
-                if (tikettitiedot.Status == "Valmis")
-                {
-                    return RedirectToAction("Tiketti3");
+                    case "Uusi":
+                        return RedirectToAction("Tiketti1");
+                    case "Kesken":
+                        return RedirectToAction("Tiketti2");
+                    case "Valmis":
+                        return RedirectToAction("Tiketti3");
                 }
             }
 
-            // Voit jättää ViewBag.Status ja ViewBag.itHenkiloID -koodin samaksi
             ViewBag.Status = new SelectList(db.Tikettitiedot, "Status", "Status", tikettitiedot.Status);
             ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
 
