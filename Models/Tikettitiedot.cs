@@ -11,6 +11,7 @@ namespace TikettiDB.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public partial class Tikettitiedot
     {
@@ -26,7 +27,9 @@ namespace TikettiDB.Models
         public int YhteysID { get; set; }
         public int? LaitenumeroID { get; set; }
         public int AsiakasID { get; set; }
-        public System.DateTime PVM { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PVM { get; set; }
         public string Ongelman_kuvaus { get; set; }
         public int itHenkiloID { get; set; }
         public string Yhteyden_tyyppi { get; set; }
