@@ -19,12 +19,47 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot
         public ActionResult Index()
         {
+            //Rajaus, kuka pääsee millekin sivulle
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 3)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 2)
+            {
+                // Käyttäjällä on taso 2, estä pääsy sivulle
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
             return View(tikettitiedot.ToList());
         }
 
         public ActionResult Tiketti1()
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estää pääsyn sivuille
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
 
             var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Uusi")
@@ -40,6 +75,23 @@ namespace TikettiDB.Controllers
 
         public ActionResult Tiketti2()
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estää pääsyn sivuille
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Kesken")
                 .Include(t => t.Asiakastiedot)
@@ -53,6 +105,23 @@ namespace TikettiDB.Controllers
 
         public ActionResult Tiketti3()
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estää pääsyn sivuille
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             var tikettitiedot = db.Tikettitiedot
                 .Where(t => t.Status == "Valmis")
                 .Include(t => t.Asiakastiedot)
@@ -83,6 +152,24 @@ namespace TikettiDB.Controllers
         // Laiteongelman create
         public ActionResult Create()
         {
+            //Rajaus, kuka pääsee millekin sivulle
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 3)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 2)
+            {
+                // Käyttäjällä on taso 2, estä pääsy sivulle
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             return View();
         }
 
@@ -177,6 +264,24 @@ namespace TikettiDB.Controllers
         // Yhteysongelman create
         public ActionResult Create2()
         {
+            //Rajaus, kuka pääsee millekin sivulle
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 3)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 2)
+            {
+                // Käyttäjällä on taso 2, estä pääsy sivulle
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi");
             return View();
         }
@@ -285,6 +390,23 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estää pääsyn sivuille
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -302,7 +424,7 @@ namespace TikettiDB.Controllers
         // POST: Tikettitiedot/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TikettiID,RatkaisunKuvaus,Sahkoposti,Status")] Tikettitiedot tikettitiedot)
+        public ActionResult Edit([Bind(Include = "TikettiID,RatkaisunKuvaus,Sahkoposti,Status,itHenkiloID")] Tikettitiedot tikettitiedot)
         {
             if (ModelState.IsValid)
             {
@@ -319,6 +441,7 @@ namespace TikettiDB.Controllers
                 // Päivittää
                 vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
                 vanhaTiketti.Status = tikettitiedot.Status;
+                vanhaTiketti.itHenkiloID = tikettitiedot.itHenkiloID;
 
                 //Tallenna muutettu tietue tietokantaan
                 db.SaveChanges();
@@ -345,6 +468,23 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estää pääsyn sivuille
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

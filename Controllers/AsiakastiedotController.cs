@@ -170,7 +170,7 @@ namespace TikettiDB.Controllers
             return View(asiakastiedot);
         }
 
-        //POISTA TÄMÄ JOS POISTAT EDITIN KOKONAAN
+        //POISTA TÄMÄ JOS POISTAT EDITIN KOKONAAN, OHJELMASSA EI OLE EDITTIÄ
         // GET: Asiakastiedot/Edit/5
         public ActionResult Edit(int? id)
         {

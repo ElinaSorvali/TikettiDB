@@ -105,8 +105,7 @@ namespace TikettiDB.Controllers
             // ModelState ei ole validi, palaa näkymään
             return View(iT_tukihenkilot);
         }
-
-        //POISTA TÄMÄ JOS POISTAT EDITIN KOKONAAN
+        //EDITTIÄ EI OLE OHJELMASSA, POISTA TÄMÄ ENNEN JULKAISUA
         // GET: IT_tukihenkilot/Edit/5
         public ActionResult Edit(int? id)
         {

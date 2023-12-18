@@ -19,7 +19,7 @@ namespace TikettiDB.Controllers
             }
             else
             {
-                //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
+                //Tämä hakee viewbag.loggedstatukseen kirjautuneen nimen tervetulotoivotukseen
                 string userName = Session["Sahkoposti"].ToString();
                 ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
                 return View();
@@ -29,19 +29,7 @@ namespace TikettiDB.Controllers
 
         public ActionResult About()
         {
-            //Statukset kirjautumistilanteen mukaan ja toinen status yläpalkkia varten
-            if (Session["Sahkoposti"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            else
-            {
-                //Tämä hakee kirjautuneen nimen tervetulotoivotukseen
-                string userName = Session["Sahkoposti"].ToString();
-                ViewBag.LoggedStatus = "Tervetuloa " + userName + "!";
-                return View();
-            }
-
+            return View();
         }
 
         public ActionResult Login()
@@ -68,7 +56,7 @@ namespace TikettiDB.Controllers
 
                 switch (userLevel)
                 {
-                    //Tässä on vain esimerkkisivut, jotka pitää muuttaa kun sivut ovat olemassa
+                    //Tämä ohjaa halutulle sivulle sen perusteella mikä Taso käyttäjällä on
                     case 1:
                         return RedirectToAction("Tiketti", "Tikettitiedot");
                     case 2:

@@ -28,7 +28,13 @@
             Ongelman kuvaus
         </th>
         <th>
+            Ratkaisun kuvaus
+        </th>
+        <th>
             Laitteen nimi
+        </th>
+        <th>
+            IT-tukihenkilön sähköposti
         </th>
         <th>
             Status
@@ -59,7 +65,13 @@
                 @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Sahkoposti)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -68,7 +80,7 @@
 
             <td>
                 @Html.ActionLink("Muuta tikettiä", "Edit", new { id = item.TikettiID })
-                    @*@Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |*@
+                @*@Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |*@
                 @Html.ActionLink("Delete", "Delete", new { id = item.TikettiID })
             </td>
         </tr>
