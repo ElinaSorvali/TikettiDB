@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
 
 @{
-    ViewBag.Title = "Tiketti3";
+    ViewBag.Title = "Valmiit tiketit";
 }
 
 <h2>Valmiit tiketit</h2>
@@ -14,9 +14,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PVM)
-        </th>
-        <th>
-            Yhteyden tyyppi
         </th>
         <th>
             Asiakkaan nimi
@@ -51,9 +48,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PVM)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YhteydenTyyppi.Yhteyden_tyyppi)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)

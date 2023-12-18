@@ -184,7 +184,8 @@ namespace TikettiDB.Controllers
                 tikettitiedot.Status = "Uusi";
                 // Etsi Asiakastiedot-taulusta
                 Asiakastiedot asiakastiedot = db.Asiakastiedot.SingleOrDefault(a => a.Sahkoposti == tikettitiedot.Sahkoposti);
-                if (asiakastiedot == null)
+                IT_tukihenkilot ithenkilot = db.IT_tukihenkilot.SingleOrDefault(i => i.Sahkoposti == tikettitiedot.Sahkoposti);
+                if (asiakastiedot == null && ithenkilot == null)
                 {
                     // Jos asiakasta ei löydy, voit antaa virheviestin
                     ModelState.AddModelError("", "Anna oikea sähköpostiosoite");
@@ -228,7 +229,7 @@ namespace TikettiDB.Controllers
                     return View(tikettitiedot);
                 }
 
-                // Luo uusi tieto Asiakastiedot-tauluun
+                // Luo uusi tieto
                 Tikettitiedot tikettitieto = new Tikettitiedot
                 {
                     Etunimi = asiakastiedot.Etunimi,
@@ -441,7 +442,6 @@ namespace TikettiDB.Controllers
                 // Päivittää
                 vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
                 vanhaTiketti.Status = tikettitiedot.Status;
-                vanhaTiketti.itHenkiloID = tikettitiedot.itHenkiloID;
 
                 //Tallenna muutettu tietue tietokantaan
                 db.SaveChanges();
