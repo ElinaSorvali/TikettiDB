@@ -184,8 +184,7 @@ namespace TikettiDB.Controllers
                 tikettitiedot.Status = "Uusi";
                 // Etsi Asiakastiedot-taulusta
                 Asiakastiedot asiakastiedot = db.Asiakastiedot.SingleOrDefault(a => a.Sahkoposti == tikettitiedot.Sahkoposti);
-                IT_tukihenkilot ithenkilot = db.IT_tukihenkilot.SingleOrDefault(i => i.Sahkoposti == tikettitiedot.Sahkoposti);
-                if (asiakastiedot == null && ithenkilot == null)
+                if (asiakastiedot == null)
                 {
                     // Jos asiakasta ei löydy, voit antaa virheviestin
                     ModelState.AddModelError("", "Anna oikea sähköpostiosoite");
@@ -194,7 +193,7 @@ namespace TikettiDB.Controllers
                 // Etsi Sijainti-taulusta
                 Sijainti sijainti = db.Sijainti.SingleOrDefault(s => s.SijaintiID == asiakastiedot.SijaintiID);
                 //LaitteenTyyppi
-                LaitteenTyyppi uusiLaitteenTyyppi = db.LaitteenTyyppi.SingleOrDefault(l => l.Laitteen_nimi == tikettitiedot.Laitteen_nimi);
+                LaitteenTyyppi uusiLaitteenTyyppi = db.LaitteenTyyppi.SingleOrDefault(l => l.LaitenumeroID == tikettitiedot.LaitenumeroID);
 
                 if (uusiLaitteenTyyppi == null)
                 {
@@ -229,7 +228,7 @@ namespace TikettiDB.Controllers
                     return View(tikettitiedot);
                 }
 
-                // Luo uusi tieto
+                // Luo uusi tieto Asiakastiedot-tauluun
                 Tikettitiedot tikettitieto = new Tikettitiedot
                 {
                     Etunimi = asiakastiedot.Etunimi,
@@ -302,14 +301,14 @@ namespace TikettiDB.Controllers
                 {
                     // Jos asiakasta ei löydy, voit antaa virheviestin
                     ModelState.AddModelError("", "Anna oikea sähköpostiosoite");
-                    ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi", tikettitiedot.Yhteyden_tyyppi);
                     return View(tikettitiedot);
                 }
 
                 // Etsi Sijainti-taulusta
                 Sijainti sijainti = db.Sijainti.SingleOrDefault(s => s.SijaintiID == asiakastiedot.SijaintiID);
                 //LaitteenTyyppi
-                LaitteenTyyppi uusiLaitteenTyyppi = db.LaitteenTyyppi.SingleOrDefault(l => l.Laitteen_nimi == tikettitiedot.Laitteen_nimi);
+                LaitteenTyyppi uusiLaitteenTyyppi = db.LaitteenTyyppi.SingleOrDefault(l => l.LaitenumeroID == tikettitiedot.LaitenumeroID);
+
 
                 if (uusiLaitteenTyyppi == null)
                 {
@@ -317,19 +316,17 @@ namespace TikettiDB.Controllers
                     if (tikettitiedot.Laitteen_nimi == null)
                     {
                         ModelState.AddModelError("", "Laitteen kuvaus ei voi olla tyhjä.");
-                        ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi", tikettitiedot.Yhteyden_tyyppi);
                         return View(tikettitiedot);
                     }
                     // Jos laitetyyppiä ei löydy, luo uusi
                     Sijainti sijaintiLaitteelle = db.Sijainti.SingleOrDefault(s => s.SijaintiID == asiakastiedot.SijaintiID);
 
-                    //if (sijaintiLaitteelle == null)
-                    //{
-                    //    // Jos sijaintia ei löydy, virheviesti
-                    //    ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
-                    //    ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi", tikettitiedot.Yhteyden_tyyppi);
-                    //    return View(tikettitiedot);
-                    //}
+                    if (sijaintiLaitteelle == null)
+                    {
+                        // Jos sijaintia ei löydy, virheviesti
+                        ModelState.AddModelError("", "Sijaintia ei löytynyt annetuilla tiedoilla.");
+                        return View(tikettitiedot);
+                    }
 
                     uusiLaitteenTyyppi = new LaitteenTyyppi
                     {
@@ -351,7 +348,6 @@ namespace TikettiDB.Controllers
                 if (tikettitiedot.Ongelman_kuvaus == null)
                 {
                     ModelState.AddModelError("", "Ongelman kuvaus ei voi olla tyhjä.");
-                    ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi", tikettitiedot.Yhteyden_tyyppi);
                     return View(tikettitiedot);
                 }
 
@@ -369,7 +365,7 @@ namespace TikettiDB.Controllers
                     AsiakasID = asiakastiedot.AsiakasID,
                     YhteysID = tikettitiedot.YhteysID,
                     itHenkiloID = 2000,
-                    PVM = DateTime.UtcNow,  // Aseta PVM nykyhetkeen
+                    PVM = DateTime.UtcNow,
                     LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID,
                     Status = tikettitiedot.Status
                 };
