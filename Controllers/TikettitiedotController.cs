@@ -438,6 +438,7 @@ namespace TikettiDB.Controllers
                 // Päivittää
                 vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
                 vanhaTiketti.Status = tikettitiedot.Status;
+                vanhaTiketti.itHenkiloID = tikettitiedot.itHenkiloID;
 
                 //Tallenna muutettu tietue tietokantaan
                 db.SaveChanges();
