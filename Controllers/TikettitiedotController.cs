@@ -202,7 +202,7 @@ namespace TikettiDB.Controllers
                         ModelState.AddModelError("", "Laitteen kuvaus ei voi olla tyhjä.");
                         return View(tikettitiedot);
                     }
-                    // Jos laitetyyppiä ei löydy, luo uusi
+
                     Sijainti sijaintiLaitteelle = db.Sijainti.SingleOrDefault(s => s.SijaintiID == asiakastiedot.SijaintiID);
 
                     if (sijaintiLaitteelle == null)
@@ -502,7 +502,7 @@ namespace TikettiDB.Controllers
             Tikettitiedot tikettitiedot = db.Tikettitiedot.Find(id);
             db.Tikettitiedot.Remove(tikettitiedot);
             db.SaveChanges();
-            return RedirectToAction("Tiketti");
+            return RedirectToAction("Tiketti3");
         }
 
         public ActionResult Tiketti()

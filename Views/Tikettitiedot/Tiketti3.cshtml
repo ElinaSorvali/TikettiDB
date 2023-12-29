@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 @{
     ViewBag.Title = "Valmiit tiketit";
@@ -73,9 +75,9 @@
 
 
             <td>
-                @Html.ActionLink("Muuta tikettiä", "Edit", new { id = item.TikettiID })
-                @*@Html.ActionLink("Details", "Details", new { id = item.TikettiID }) |*@
-                @Html.ActionLink("Delete", "Delete", new { id = item.TikettiID })
+                <a href="@Url.Action("Delete", new { id = item.TikettiID })" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
             </td>
         </tr>
     }

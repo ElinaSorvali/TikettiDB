@@ -1,14 +1,15 @@
 ﻿@model TikettiDB.Models.Tikettitiedot
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 @{
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Poista tiketti</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Haluatko varmasti poistaa tiketin? Poistoa ei voi perua.</h3>
 <div>
-    <h4>Tikettitiedot</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -61,12 +62,13 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Tiketti")
-        </div>
+        <button type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa tiketin?');"><i class="fas fa-trash-alt"></i></button>
+
+        <a href="@Url.Action("Tiketti3", "Tikettitiedot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
+
     }
 </div>
