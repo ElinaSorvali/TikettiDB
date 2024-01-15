@@ -7,10 +7,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/chart")
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
-   
+    <hr />
+    @*Tarkistetaan onko kirjautunut*@
     @{
         if (Session["Sahkoposti"] == null)
         {
@@ -37,30 +38,33 @@
     }
 
 
-    @*Sivun alaosassa näkyvä käyttäjätieto ja päivämäärä*@
-    <div class="container-fluid">
-        @RenderBody()
-        
-        <hr />
-        <footer class="oma-footer">
-            @using System.Globalization
-            @{
-                string LoggedStatus = "";
-                if (Session["Sahkoposti"] == null)
-                {
-                    LoggedStatus = "et ole kirjautunut järjestelmään";
-                }
-                else
-                {
-                    LoggedStatus = "olet kirjautunut sähköpostilla " + Session["Sahkoposti"];
-                }
-            }
-            <p>&copy; Tiketti-tietokanta, @LoggedStatus, tänään on @DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture("fi-FI"))</p>
-        </footer>
+    @*Renderöinti, tässä näkyy sivut*@
+<div class="container-fluid">
+    @RenderBody()
+
+    <hr />
+    @*<footer class="oma-footer">*@
+    @using System.Globalization
+
+    @*Sivun alaosassa näkyvä sähköposti ja tieto että olet/et ole kirjautunut*@
+    @{
+        string LoggedStatus = "";
+        if (Session["Sahkoposti"] == null)
+        {
+            LoggedStatus = "et ole kirjautunut järjestelmään";
+        }
+        else
+        {
+            LoggedStatus = "olet kirjautunut sähköpostilla " + Session["Sahkoposti"];
+        }
+    }
+    @*Alaosa ja himmennys*@
+    <div class="opacity-50">
+        <p>&copy; Tiketti-tietokanta, @LoggedStatus, tänään on @DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture("fi-FI"))</p>
+        @*</footer>*@
     </div>
+</div>
 
-
-    @Scripts.Render("~/bundles/bootstraplux")
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

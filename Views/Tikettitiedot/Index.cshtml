@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tee uusi tiketti";
 }
 <br />
 <h2>Tervetuloa jättämään tiketti!</h2>
-
+<h4>Valitse allaolevista vaihtoehdoista.</h4>
+<br />
 <p>
-<a href="~/Tikettitiedot/Create">Laiteongelma</a>
-<a href="~/Tikettitiedot/Create2">Yhteysongelma</a>
+
+    <a href="~/Tikettitiedot/Create" class="btn btn-default">Laiteongelma</a>
+    <a href="~/Tikettitiedot/Create2" class="btn btn-default">Yhteysongelma</a>
+
 </p>

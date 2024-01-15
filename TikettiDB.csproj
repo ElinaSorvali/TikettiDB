@@ -214,6 +214,7 @@
     <Content Include="Models\TikettiModel.edmx.diagram">
       <DependentUpon>TikettiModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Pictures\logo-vaaka.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />

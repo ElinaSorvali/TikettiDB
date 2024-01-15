@@ -1,16 +1,18 @@
-﻿
-
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light" style="background: linear-gradient(to right, #e9c46b, #fefaef); ">
     <div class="container">
-        @Html.ActionLink("Tiketti", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        <a href="@Url.Action("Login", "Home")">
+            <img src="~/Pictures/logo-vaaka.png" width="200" />
+        </a>
+
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
             <ul class="navbar-nav flex-grow-1">
-                <li>@Html.ActionLink("Ohjeet", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-            </ul>
+                </ul>
         </div>
     </div>
+
 </nav>
+<hr />

@@ -7,9 +7,9 @@
 }
 
 <h2>Valmiit tiketit</h2>
+<br />
 
-
-<table class="table">
+<table class="table table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.TikettiID)
@@ -29,9 +29,9 @@
         <th>
             Ratkaisun kuvaus
         </th>
-        <th>
+        @*<th>
             Laitteen nimi
-        </th>
+        </th>*@
         <th>
             IT-tukihenkilön sähköposti
         </th>
@@ -63,9 +63,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Sahkoposti)
             </td>
@@ -75,6 +75,10 @@
 
 
             <td>
+                <a href="@Url.Action("Edit", new { id = item.TikettiID })" class="btn btn-default">
+                    <i class="fas fa-edit"></i>
+                </a>
+
                 <a href="@Url.Action("Delete", new { id = item.TikettiID })" class="btn btn-danger">
                     <i class="fas fa-trash-alt"></i>
                 </a>

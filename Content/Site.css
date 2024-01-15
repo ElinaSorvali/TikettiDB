@@ -1,4 +1,9 @@
-﻿/* Set padding to keep content from hitting the edges */
+﻿body {
+    font-family: 'Univers 45 Light', sans-serif;
+    background-color: floralwhite;
+}
+
+/* Set padding to keep content from hitting the edges */
 .body-content {
     margin-top: 15px;
     padding-left: 15px;
@@ -18,3 +23,43 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+/* navbarin linkkien väriä */
+.navbar-nav a {
+    color: black; /* musta väri */
+    font-weight: 700;
+}
+
+.container-fluid hr {
+    border-color: #947201; /*Pitäisi olla #D7AF4D mutta ei toimi*/
+    border-width: 2px;
+}
+
+
+.btn {
+    background-color: #D7AF4D;
+    border-color: #D7AF4D;
+    color: black;
+}
+
+.custom-color {
+    color: #D7AF4D;
+}
+
+
+.table-hover tbody th {
+    background: #e9c46c;
+}
+
+/*.table-hover tbody tr th {
+    background: linear-gradient(to right, #e9c46c, white);
+}*/
+
+
+.table-hover tbody tr:hover td {
+    background: #ffedc1;
+}
+
+
+

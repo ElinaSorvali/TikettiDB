@@ -1,14 +1,16 @@
-﻿
-
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+﻿    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light" style="background: linear-gradient(to right, #e9c46b, #fefaef); ">
     <div class="container">
-        @*@Html.ActionLink("Pääkäyttäjän näkymä", "Tiketti", "Tikettitiedot", new { area = "" }, new { @class = "navbar-brand" })*@
+        <a href="@Url.Action("Tiketti", "Tikettitiedot")">
+            <img src="~/Pictures/logo-vaaka.png" width="200" />
+        </a>
+
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
             <ul class="navbar-nav flex-grow-1">
+
                 <li>@Html.ActionLink("IT-tukihenkilöt", "Index", "IT_tukihenkilot", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Asiakastiedot", "Index", "Asiakastiedot", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Asiakkaan tiketin jättö", "Index", "Tikettitiedot", new { area = "" }, new { @class = "nav-link" })</li>
@@ -16,10 +18,12 @@
                 <li>@Html.ActionLink("Työn alla", "Tiketti2", "Tikettitiedot", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Valmis", "Tiketti3", "Tikettitiedot", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Kirjaudu ulos", "LogOut", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
             </ul>
         </div>
     </div>
 </nav>
+<hr />
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")

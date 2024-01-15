@@ -1,7 +1,9 @@
-﻿
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light" style="background: linear-gradient(to right, #e9c46b, #fefaef); ">
     <div class="container">
-        @Html.ActionLink("It-tukihenkilön näkymä", "Tiketti", "Tikettitiedot", new { area = "" }, new { @class = "navbar-brand" })
+        <a href="@Url.Action("Tiketti", "Tikettitiedot")">
+            <img src="~/Pictures/logo-vaaka.png" width="200" />
+        </a>
+
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -16,6 +18,6 @@
         </div>
     </div>
 </nav>
-
+<hr />
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")

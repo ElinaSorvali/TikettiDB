@@ -29,6 +29,10 @@ namespace TikettiDB.Controllers
 
         public ActionResult About()
         {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 

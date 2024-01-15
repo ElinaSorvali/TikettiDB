@@ -10,13 +10,12 @@
             @*<div class="bg-img">*@
             @*Tässä on taustakuva*@
             <div class="modal-header">
-                <h2>Haluatko varmasti poistaa?</h2>
+                <h3>Haluatko varmasti poistaa it-tukihenkilön?</h3>
             </div>
             <div class="modal-body">
 
                 <div>
-                    <h4>IT_tukihenkilot</h4>
-                    <hr />
+
                     <dl class="dl-horizontal">
                         <dt>
                             @Html.DisplayNameFor(model => model.Etunimi)
@@ -73,11 +72,10 @@
                         @Html.AntiForgeryToken()
 
                 <div class="form-actions no-color">
-                    <button type="submit" value="Delete" class="btn btn-primary"><i class="fas fa-trash-alt"></i></button>
+                    <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                     <a href="@Url.Action("Index", "IT_tukihenkilot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
 
-                    <input type="submit" value="Delete" class="btn btn-default" /> |
-                    @Html.ActionLink("Back to List", "Index")
+
                 </div>
                     }
                 </div>
