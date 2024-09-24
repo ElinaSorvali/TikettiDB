@@ -1,23 +1,33 @@
 ﻿@model TikettiDB.Models.Asiakastiedot
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha384-qzVjFT1aI01L2tJ3l6h8ZqLwTcj3PbrxFp6AlC5jvquSAOuFalUVyJDDb1z9dMEH" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6q8F+cA/Qb5EBqZHP/r5FQ8JLsI0D+Q" crossorigin="anonymous"></script>
+
+@*Scripti salasanojen tarkistukseen*@
+<script>
+    document.querySelector("form").addEventListener("submit", function (event) {
+        var password = document.getElementById("Salasana").value;
+        var confirmPassword = document.getElementById("ConfirmPassword").value;
+
+        if (password !== confirmPassword) {
+            event.preventDefault(); // Estää lomakkeen lähettämisen
+            alert("Salasanat eivät täsmää!");
+        }
+    });
+</script>
 
 
 <div class="modal fade" id="uudetAsiakastiedotCreate">
     <div class="modal-dialog">
         <div class="modal-content">
-            @*<div class="bg-img">*@
-            @*Tässä on taustakuva*@
-            <div class="modal-header">
-                <h2>Luo uusi asiakas</h2>
-            </div>
-            <div class="modal-body">
+            <div class="bg-img">
+                @*Tässä on taustakuva*@
+                <div class="modal-header">
+                    <h2>Luo uusi asiakas</h2>
+                </div>
+                <div class="modal-body">
 
 
-                @using (Html.BeginForm("Create", "Asiakastiedot", FormMethod.Post, new { id = "createForm" }))
-                {
-                    @Html.AntiForgeryToken()
+                    @using (Html.BeginForm("Create", "Asiakastiedot", FormMethod.Post, new { id = "createForm" }))
+                    {
+                        @Html.AntiForgeryToken()
 
                     <div class="form-horizontal">
 
@@ -75,11 +85,22 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control", autocomplete = "new-password" } })
                                 @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
-
                             </div>
                         </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ConfirmPassword, "Vahvista salasana", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <label class="text-danger">
+                            @Html.DisplayFor(model => model.ErrorMessage)
+                        </label>
 
                         <div class="modal-footer">
                             <div>
@@ -90,8 +111,9 @@
                             </div>
                         </div>
                     </div>
-                }
+                    }
 
+                </div>
             </div>
         </div>
     </div>

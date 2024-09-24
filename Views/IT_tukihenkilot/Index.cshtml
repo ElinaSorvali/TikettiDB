@@ -28,16 +28,33 @@
         $(function () {
             $(".haeitHenkiloID").click(function () {
                 let itId = $(this).data("itid");
-                console.log("Klikkasit poistettavaa tilausnumeroa: " + itId);
+                console.log("Klikkasit poistettavaa it-henkilöä: " + itId);
                 var url = "/IT_tukihenkilot/_DeleteModal/?id=" + itId;
                 console.log(url);
 
-                $("#orderDelete").append(" <b>Avataan tilauksen " + itId + " poistoikkuna...</b>");
+                $("#orderDelete").append(" <b>Avataan " + itId + " poistoikkuna...</b>");
 
                 var $detailDivDelete = $("#ITdelete");
                 $.get(url, function (data) {
                     $detailDivDelete.replaceWith(data);
                     $('#ModalITDelete').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            $(".edititHenkiloID").click(function () {
+                let itId = $(this).data("itid");
+                console.log("Klikkasit editoitavaa it-henkilöä: " + itId);
+                var url = "/IT_tukihenkilot/_EditModal/?id=" + itId;
+                console.log(url);
+
+                $("#itEdit").append(" <b>Avataan " + itId + " edit-ikkuna...</b>");
+
+                var $detailDivEdit = $("#itEdit");
+                $.get(url, function (data) {
+                    $detailDivEdit.replaceWith(data);
+                    $('#ModalITEdit').modal('show');
                 });
             });
         });
@@ -52,8 +69,9 @@
     <h2><i class="fas fa-plus-circle custom-color"></i></h2></a>
 
 <div id="ITdelete"></div>
+<div id="itEdit"></div>
 
-<table class="table table-hover">
+<table class="table table-hover" style="width:60%">
     <tr>
 
         <th>
@@ -68,9 +86,9 @@
         <th>
             Sähköposti
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
-        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
+            </th>*@
         <th>
             Taso
         </th>
@@ -92,13 +110,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Kirjautuminen.Sahkoposti)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
-            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
+                </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Kirjautuminen.Taso)
             </td>
             <td>
+                @*<a href="@Url.Action("Edit", new { id = item.itHenkiloID })" class="btn btn-default">
+                    <i class="fas fa-edit"></i>
+                </a>*@
+                <button class="btn btn-primary edititHenkiloID fas fa-edit" data-itid="@item.itHenkiloID" data-toggle="modal" data-target="#editModal">
+                </button>
                 <button class="btn btn-danger haeitHenkiloID fas fa-trash-alt" data-itid="@item.itHenkiloID" data-toggle="modal" data-target="#deleteModal">
                 </button>
             </td>

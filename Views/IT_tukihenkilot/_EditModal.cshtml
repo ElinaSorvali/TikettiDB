@@ -1,88 +1,86 @@
 ﻿@model TikettiDB.Models.IT_tukihenkilot
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha384-qzVjFT1aI01L2tJ3l6h8ZqLwTcj3PbrxFp6AlC5jvquSAOuFalUVyJDDb1z9dMEH" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6q8F+cA/Qb5EBqZHP/r5FQ8JLsI0D+Q" crossorigin="anonymous"></script>
-
 
 <div class="modal fade" id="ModalITEdit">
     <div class="modal-dialog">
         <div class="modal-content">
-            @*<div class="bg-img">*@
-            @*Tässä on taustakuva*@
-            <div class="modal-header">
-                <h2>Muokkaa IT-tukihenkilöitä</h2>
-            </div>
-            <div class="modal-body">
-
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-                <div class="form-horizontal">
-                    <h4>IT_tukihenkilot</h4>
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.itHenkiloID)
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Etunimi, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Etunimi, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Etunimi, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Sukunimi, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Sukunimi, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Sukunimi, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Puhelinnro, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Puhelinnro, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Puhelinnro, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Sahkoposti, "Sähköposti", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Sahkoposti, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Sahkoposti, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Salasana, new { @class = "form-control", type = "password" })
-                            @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Taso, "Taso", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.Taso, new SelectList(new[] { "1", "2" }), "Valitse taso", new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Taso, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
-                        </div>
-                    </div>
+            <div class="bg-img">
+                @*Tässä on taustakuva*@
+                <div class="modal-header">
+                    <h2>Muokkaa IT-tukihenkilöitä</h2>
                 </div>
-                }
+                <div class="modal-body">
 
-                <div>
-                    @Html.ActionLink("Back to List", "Index")
+                    @using (Html.BeginForm("Edit", "IT_tukihenkilot", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <h4>IT-tukihenkilöt</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.itHenkiloID)
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Etunimi, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Etunimi, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Etunimi, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Sukunimi, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Sukunimi, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Sukunimi, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Puhelinnro, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Puhelinnro, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Puhelinnro, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Sahkoposti, "Sähköposti", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Sahkoposti, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Sahkoposti, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                    @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Taso, "Taso", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.Taso, new SelectList(new[] { "1", "2" }), "Valitse taso", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Taso, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <p>
+                                <div class="modal-footer">
+                                    <div>
+                                        @*Formin lähettävä button, joka ei kuitenkaan ole formin sisällä, mutta viittaa formin ID:hen*@
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
+                                        @*Kontrollerin kutsu Url.Action -komennolla, jotta peruuttaminen johtaa alkutilanteeseen*@
+                                        <a href="@Url.Action("Index", "IT_tukihenkilot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                    }
+
                 </div>
             </div>
         </div>

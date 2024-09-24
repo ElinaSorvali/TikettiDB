@@ -1,0 +1,91 @@
+﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+@{
+    ViewBag.Title = "Valmiit tiketit";
+}
+
+<h2>Valmiit tiketit</h2>
+<br />
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TikettiID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PVM)
+        </th>
+        <th>
+            Asiakkaan nimi
+        </th>
+        <th>
+            Asiakkaan sähköposti
+        </th>
+        <th>
+            Ongelman kuvaus
+        </th>
+        <th>
+            Ratkaisun kuvaus
+        </th>
+        @*<th>
+            Laitteen nimi
+        </th>*@
+        <th>
+            IT-tukihenkilön sähköposti
+        </th>
+        <th>
+            Status
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TikettiID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PVM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asiakastiedot.Sahkoposti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Sahkoposti)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.TikettiID })" class="btn btn-default">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <a href="@Url.Action("Delete", new { id = item.TikettiID })" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+

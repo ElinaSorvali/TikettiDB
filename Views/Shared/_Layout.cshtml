@@ -8,6 +8,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
     <hr />
@@ -15,7 +17,8 @@
     @{
         if (Session["Sahkoposti"] == null)
         {
-            Html.RenderPartial("_NavbarLoggedOut");
+            //Poistettu navbar kirjautumissivulta
+            //Html.RenderPartial("_NavbarLoggedOut");
         }
         else
         {
@@ -60,7 +63,7 @@
     }
     @*Alaosa ja himmennys*@
     <div class="opacity-50">
-        <p>&copy; Tiketti-tietokanta, @LoggedStatus, tänään on @DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture("fi-FI"))</p>
+        <p>&copy; Tiketti-tietokanta, @LoggedStatus. Tänään on @DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture("fi-FI"))</p>
         @*</footer>*@
     </div>
 </div>

@@ -1,6 +1,6 @@
 ﻿body {
     font-family: 'Univers 45 Light', sans-serif;
-    background-color: floralwhite;
+    background-color: #fdf1d3
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -47,19 +47,68 @@ textarea {
     color: #D7AF4D;
 }
 
+.btn1 {
+    background-color: #fdf1d3; /* Taustaväri */
+    color: #000; /* Tekstin väri */
+    border-radius: 100px; /* Soikea muoto */
+    padding: 15px 30px; /* Täytettä: ylhäällä ja alhaalla 15px, vasemmalla ja oikealla 30px */
+    font-size: 20px; /* Fontin koko */
+    text-align: center; /* Tekstin keskittäminen */
+    cursor: pointer; /* Muuttaa kursoria nappia klikattaessa */
+    display: inline-block; /* Näyttää napin rivissä muiden elementtien kanssa */
+    transition: background-color 0.3s ease; /* Pehmeä siirtymä taustavärille, kun hiiri on päällä */
+}
 
+    .btn1:hover {
+        background-color: #f5e0c0; /* Taustaväri hiiren ollessa päällä */
+    }
+
+
+
+/*Tämä muuttaa taulukon otsikon*/
 .table-hover tbody th {
     background: #e9c46c;
 }
 
-/*.table-hover tbody tr th {
-    background: linear-gradient(to right, #e9c46c, white);
-}*/
+.table tbody td {
+    /*background: linear-gradient(to right, #e9c46c, white);*/
+    background: #fdf1d3;
+}
 
-
+/*Tämä muuttaa solun värin kun hiiri viedään päälle*/
 .table-hover tbody tr:hover td {
     background: #ffedc1;
 }
 
+.bg-img {
+    background-color: #fdf1d3; /* Taustaväri */
+    background-image: url('/Pictures/logo-vaaka.png'); /* Taustakuva */
+    background-repeat: no-repeat; /* Estää kuvan toistumisen */
+    background-size: 120px; /* Taustakuvan koko */
+    padding: 20px; /* Tilaa sisällön ympärille */
+}
 
+/*Login-sivun asetukset*/
+.login-page-container {
+    height: 70vh; /* näkymän korkeus */
+    display: flex; 
+    justify-content: center; /* Keskittää sisällön vaakasuunnassa */
+    align-items: center; /* Keskittää sisällön pystysuunnassa */
+    flex-direction: column; /* Järjestää sisällön pystysuunnassa */
+    text-align: center; 
+}
+
+/*tiketti-sivun asetukset*/
+.page-container {
+    height: 70vh; /* Kontin korkeus */
+    display: flex; /* Määrittää Flexbox-asettelun */
+    justify-content: center; /* Keskittää konttia vaakasuunnassa */
+    align-items: center; /* Keskittää konttia pystysuunnassa */
+    flex-direction: column; /* Asettaa sisällön pystysuunnassa */
+}
+
+.content-container {
+    text-align: left; /* Tekstin vasemmalle tasaus */
+    width: 100%; /* Tarvittaessa voi määritellä leveyden */
+}
 

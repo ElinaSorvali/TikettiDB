@@ -5,9 +5,6 @@
 }
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
 @section scripts {
     <script type="text/javascript">
         $(function () {
@@ -29,17 +26,35 @@
         $(function () {
             $(".haeAsiakasID").click(function () {
                 let atId = $(this).data("atid");
-                console.log("Klikkasit poistettavaa tilausnumeroa: " + atId);
+                console.log("Klikkasit poistettavaa asiakasta: " + atId);
                 var url = "/Asiakastiedot/_ModalDelete/?id=" + atId;
                 console.log(url);
 
-                $("#orderDelete").append(" <b>Avataan tilauksen " + atId + " poistoikkuna...</b>");
+                $("#orderDelete").append(" <b>Avataan asiakkaan " + atId + " poistoikkuna...</b>");
 
                 var $detailDivDelete = $("#ATdelete");
                 $.get(url, function (data) {
                     $detailDivDelete.replaceWith(data);
                     $('#ModalATDelete').modal('show');
                 });
+            });
+        });
+
+        $(function () {
+            $(".editAsiakasID").click(function () {
+                let atId = $(this).data("atid");
+                console.log("Klikkasit editoitavaa asiakasta: " + atId);
+                var url = "/Asiakastiedot/_ModalEdit/?id=" + atId;
+                console.log(url);
+
+                $("#ATedit").append(" <b>Avataan asiakkaan " + atId + " edit-ikkuna...</b>");
+
+                var $detailDivEdit = $("#ATedit");
+                $.get(url, function (data) {
+                    $detailDivEdit.replaceWith(data);
+                    $('#ModalATEdit').modal('show');
+                });
+
             });
         });
     </script>
@@ -50,73 +65,81 @@
 <h2>Asiakastiedot</h2>
 <div id="asiakastiedotCreate"></div>
 <a href="#" id="asiakastiedotCreate" class="uusiAsiakastiedotCreate">
-    <h2><i class="fas fa-plus-circle custom-color"></i></h2></a>
+    <h2><i class="fas fa-plus-circle custom-color"></i></h2>
+</a>
 
 
-    <div id="ATdelete"></div>
-    <table class="table table-hover">
-        <tr>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Etunimi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sukunimi)
-            </th>
-            <th>
-                Puhelinnumero
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sijainti.Osoite)
-            </th>
-            <th>
-                Postinumero
-            </th>
-            <th>
-                Postitoimipaikka
-            </th>
-            <th>
-                Sähköposti
-            </th>
-            <th>
+<div id="ATdelete"></div>
+<div id="ATedit"></div>
+<table class="table table-hover" @*style="width:80%"*@>
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Etunimi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sukunimi)
+        </th>
+        <th>
+            Puhelinnumero
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sijainti.Osoite)
+        </th>
+        <th>
+            Postinumero
+        </th>
+        <th>
+            Postitoimipaikka
+        </th>
+        <th>
+            Sähköposti
+        </th>
+        @*<th>
                 @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
-            </th>
-            <th></th>
-        </tr>
+            </th>*@
+        <th></th>
+    </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
+    @foreach (var item in Model)
+    {
+        <tr>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Etunimi)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sukunimi)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Puhelinnro)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sijainti.Osoite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sijainti.Postinro)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Postinumero.Postitmp)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Kirjautuminen.Sahkoposti)
-                </td>
-                <td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Etunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sukunimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Puhelinnro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sijainti.Osoite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sijainti.Postinro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Postinumero.Postitmp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kirjautuminen.Sahkoposti)
+            </td>
+            @*<td>
                     @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
-                </td>
-                <td>
-                    <button class="btn btn-danger haeAsiakasID fas fa-trash-alt" data-atid="@item.AsiakasID" data-toggle="modal" data-target="#modalDelete">
-                    </button>
-                </td>
-            </tr>
-        }
+                </td>*@
+            <td>
+                @*<a href="@Url.Action("Edit", new { id = item.AsiakasID })" class="btn btn-default">
+                        <i class="fas fa-edit"></i>
+                    </a>*@
 
-    </table>
+                <button class="btn btn-primary editAsiakasID fas fa-edit" data-atid="@item.AsiakasID" data-toggle="modal" data-target="#modalEdit">
+                </button>
+                <button class="btn btn-danger haeAsiakasID fas fa-trash-alt" data-atid="@item.AsiakasID" data-toggle="modal" data-target="#modalDelete">
+                </button>
+            </td>
+        </tr>
+    }
+
+</table>

@@ -7,86 +7,86 @@
 <div class="modal fade" id="ModalATDelete">
     <div class="modal-dialog">
         <div class="modal-content">
-            @*<div class="bg-img">*@
-            @*Tässä on taustakuva*@
-            <div class="modal-header">
-                <h3>Haluatko varmasti poistaa tämän asiakastiedon?</h3>
-            </div>
-            <div class="modal-body">
+            <div class="bg-img">
+                @*Tässä on taustakuva*@
+                <div class="modal-header">
+                    <h3>Haluatko varmasti poistaa tämän asiakastiedon?</h3>
+                </div>
+                <div class="modal-body">
 
 
-                <div>
+                    <div>
 
-                    <dl class="dl-horizontal">
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Etunimi)
-                        </dt>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Etunimi)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Etunimi)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Etunimi)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Sukunimi)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Sukunimi)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Sukunimi)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Sukunimi)
+                            </dd>
 
-                        <dt>
-                            Puhelinnumero
-                        </dt>
+                            <dt>
+                                Puhelinnumero
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Puhelinnro)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Puhelinnro)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Sijainti.Osoite)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Sijainti.Osoite)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Sijainti.Osoite)
-                        </dd>
-                        <dt>
-                            Postinumero
-                        </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Sijainti.Osoite)
+                            </dd>
+                            <dt>
+                                Postinumero
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Sijainti.Postinro)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Sijainti.Postinro)
+                            </dd>
 
-                        <dt>
-                            Sähköposti
-                        </dt>
+                            <dt>
+                                Sähköposti
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Kirjautuminen.Sahkoposti)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Kirjautuminen.Sahkoposti)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Kirjautuminen.Salasana)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Kirjautuminen.Salasana)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Kirjautuminen.Salasana)
+                            </dd>
 
-                    </dl>
+                        </dl>
 
-                    @using (Html.BeginForm())
-                    {
-                        @Html.AntiForgeryToken()
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
 
-                        <div class="form-actions no-color">
-                            <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                            <a href="@Url.Action("Index", "Asiakastiedot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
+                            <div class="form-actions no-color">
+                                <button type="submit" value="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                <a href="@Url.Action("Index", "Asiakastiedot")" class="btn btn-primary"><i class="fas fa-times"></i></a>
 
-                        </div>
-                    }
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>

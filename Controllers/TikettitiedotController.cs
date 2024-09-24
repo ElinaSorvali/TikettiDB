@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using TikettiDB.Models;
 using System.Globalization;
+using System.Net.Mail;
+using System.Text;
 
 
 namespace TikettiDB.Controllers
@@ -17,7 +19,7 @@ namespace TikettiDB.Controllers
         private TikettiDBEntities db = new TikettiDBEntities();
 
         // GET: Tikettitiedot
-        public ActionResult Index()
+        public ActionResult Index(int? searchID)
         {
             //Rajaus, kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
@@ -37,11 +39,40 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
-            var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot).Include(t => t.IT_tukihenkilot).Include(t => t.LaitteenTyyppi).Include(t => t.YhteydenTyyppi);
+
+            // Haetaan kirjautuneen käyttäjän säpo että indexissä näkyisi vain asiakkaan säpon jättämät tiketit
+            string sahkoposti = Session["Sahkoposti"].ToString();
+
+            // Suodatetaan tiketit kirjautuneen käyttäjän sähköpostiosoitteen perusteella
+            var tikettitiedot = db.Tikettitiedot.Include(t => t.Asiakastiedot)
+                                    .Where(t => t.Asiakastiedot.Sahkoposti == sahkoposti);
+
+
+            // Suorita haku, jos searchID on suurempi kuin 0
+            if (searchID.HasValue && searchID.Value > 0)
+            {
+                tikettitiedot = tikettitiedot.Where(t => t.TikettiID == searchID.Value);
+            }
+
+            // Tallenna hakuarvo näkymään
+            ViewBag.currentFilter1 = searchID;
+
             return View(tikettitiedot.ToList());
         }
 
-        public ActionResult Tiketti1()
+        public ActionResult Tiketti()
+        {
+            var tikettitiedot = db.Tikettitiedot
+                            .Where(t => t.Status == "Uusi")
+                            .Include(t => t.Asiakastiedot)
+                            .Include(t => t.IT_tukihenkilot)
+                            .Include(t => t.LaitteenTyyppi)
+                            .Include(t => t.YhteydenTyyppi)
+                            .ToList();
+
+            return View(tikettitiedot.ToList());
+        }
+        public ActionResult Tiketti1(string hakutoiminto)
         {
             if (Session["Sahkoposti"] == null)
             {
@@ -66,14 +97,37 @@ namespace TikettiDB.Controllers
                 .Include(t => t.Asiakastiedot)
                 .Include(t => t.IT_tukihenkilot)
                 .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi)
-                .ToList();
+                .Include(t => t.YhteydenTyyppi);
+
+
+            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
+            if (!string.IsNullOrEmpty(hakutoiminto))
+            {
+                //hakukysely numeroksi TikettiID:tä varten
+                int tikettiID;
+                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
+
+                if (isNumeric)
+                {
+                    //Hae TikettiID:n perusteella osittain (muunna string että voi hakea vain osalla)
+                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
+                }
+                else
+                {
+                    // Hae asiakkaan etu- tai sukunimen perusteella
+                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
+                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
+                }
+            }
+
+            // tallenna näkymään
+            ViewBag.currentFilter1 = hakutoiminto;
 
             return View(tikettitiedot.ToList());
 
         }
 
-        public ActionResult Tiketti2()
+        public ActionResult Tiketti2(string hakutoiminto)
         {
             if (Session["Sahkoposti"] == null)
             {
@@ -97,13 +151,36 @@ namespace TikettiDB.Controllers
                 .Include(t => t.Asiakastiedot)
                 .Include(t => t.IT_tukihenkilot)
                 .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi)
-                .ToList();
+                .Include(t => t.YhteydenTyyppi);
+
+            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
+            if (!string.IsNullOrEmpty(hakutoiminto))
+            {
+                //hakukysely numeroksi TikettiID:tä varten
+                int tikettiID;
+                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
+
+                if (isNumeric)
+                {
+                    // Hae TikettiID:n perusteella osittain (muunna merkkijonoksi)
+                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
+                }
+                else
+                {
+                    // Hae asiakkaan etu- tai sukunimen perusteella
+                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
+                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
+                }
+            }
+
+            // tallenna näkymään
+            ViewBag.currentFilter1 = hakutoiminto;
 
             return View(tikettitiedot.ToList());
+
         }
 
-        public ActionResult Tiketti3()
+        public ActionResult Tiketti3(string hakutoiminto)
         {
             if (Session["Sahkoposti"] == null)
             {
@@ -127,10 +204,33 @@ namespace TikettiDB.Controllers
                 .Include(t => t.Asiakastiedot)
                 .Include(t => t.IT_tukihenkilot)
                 .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi)
-                .ToList();
+                .Include(t => t.YhteydenTyyppi);
+
+            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
+            if (!string.IsNullOrEmpty(hakutoiminto))
+            {
+                //hakukysely numeroksi TikettiID:tä varten
+                int tikettiID;
+                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
+
+                if (isNumeric)
+                {
+                    // Hae TikettiID:n perusteella osittain (muunna merkkijonoksi)
+                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
+                }
+                else
+                {
+                    // Hae asiakkaan etu- tai sukunimen perusteella
+                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
+                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
+                }
+            }
+
+            // tallenna näkymään
+            ViewBag.currentFilter1 = hakutoiminto;
 
             return View(tikettitiedot.ToList());
+
         }
 
         // Laiteongelman create
@@ -226,7 +326,7 @@ namespace TikettiDB.Controllers
                     AsiakasID = asiakastiedot.AsiakasID,
                     YhteysID = 10001, //YhteysID haluamalle arvolle
                     itHenkiloID = 2000,
-                    PVM = DateTime.Today,  
+                    PVM = DateTime.Today,
                     LaitenumeroID = uusiLaitteenTyyppi.LaitenumeroID,
                     Status = tikettitiedot.Status
 
@@ -237,6 +337,9 @@ namespace TikettiDB.Controllers
 
                 // Tallenna muutokset
                 db.SaveChanges();
+
+                // Sähköpostin lähetys
+                TikettiLuotu(tikettitieto.Sahkoposti, tikettitieto.TikettiID);
 
                 return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
             }
@@ -365,6 +468,9 @@ namespace TikettiDB.Controllers
                 // Tallenna muutokset
                 db.SaveChanges();
 
+                // Sähköpostin lähetys
+                TikettiLuotu(tikettitieto.Sahkoposti, tikettitieto.TikettiID);
+
                 return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
             }
 
@@ -402,8 +508,26 @@ namespace TikettiDB.Controllers
             {
                 return HttpNotFound();
             }
+            // Hae kirjautuneen käyttäjän sähköposti istunnosta
+            string userEmail = Session["Sahkoposti"]?.ToString();
+
+            // Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
+            int? loggedInItHenkiloID = db.IT_tukihenkilot
+                .Where(h => h.Sahkoposti == userEmail)
+                .Select(h => h.itHenkiloID)
+                .FirstOrDefault();
+
+            // Aseta tikettitiedot.Sahkoposti istunnosta
+            tikettitiedot.Sahkoposti = userEmail;
+
+            // Jos itHenkiloID ei ole sama kuin kirjautuneen käyttäjän ID, päivitä se
+            if (tikettitiedot.itHenkiloID != loggedInItHenkiloID && loggedInItHenkiloID.HasValue)
+            {
+                tikettitiedot.itHenkiloID = loggedInItHenkiloID.Value;
+            }
+
             ViewBag.Status = new SelectList(db.Tikettitiedot, "Status", "Status", tikettitiedot.Status);
-            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
+            ViewBag.Sahkoposti = tikettitiedot.Sahkoposti;
             return View(tikettitiedot);
         }
 
@@ -427,10 +551,44 @@ namespace TikettiDB.Controllers
                 // Päivittää
                 vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
                 vanhaTiketti.Status = tikettitiedot.Status;
-                vanhaTiketti.itHenkiloID = tikettitiedot.itHenkiloID;
+                // Hae kirjautuneen käyttäjän sähköposti istunnosta
+                string userEmail = Session["Sahkoposti"]?.ToString();
 
+                // Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
+                int? loggedInItHenkiloID = db.IT_tukihenkilot
+                    .Where(h => h.Sahkoposti == userEmail)
+                    .Select(h => h.itHenkiloID)
+                    .FirstOrDefault();
+
+                // Päivitä vanhaTiketti.Sahkoposti kirjautuneen käyttäjän sähköpostilla
+                vanhaTiketti.Sahkoposti = userEmail;
+
+                // Jos itHenkiloID ei ole sama, päivitä itHenkiloID
+                if (vanhaTiketti.itHenkiloID != loggedInItHenkiloID && loggedInItHenkiloID.HasValue)
+                {
+                    vanhaTiketti.itHenkiloID = loggedInItHenkiloID.Value;
+                }
                 //Tallenna muutettu tietue tietokantaan
                 db.SaveChanges();
+
+                // Hae asiakkaan sähköpostiosoite Asiakastiedot-taulusta
+                var asiakkaanSahkoposti = db.Asiakastiedot
+                    .Where(a => a.AsiakasID == vanhaTiketti.AsiakasID)
+                    .Select(a => a.Sahkoposti)
+                    .FirstOrDefault();
+
+                // Lähetä sähköposti, jos Status on "Valmis" ja sähköpostiosoite ei ole tyhjä
+                if (tikettitiedot.Status == "Valmis" && !string.IsNullOrEmpty(asiakkaanSahkoposti))
+                {
+                    try
+                    {
+                        TikettiValmis(asiakkaanSahkoposti, tikettitiedot.TikettiID);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Sähköpostin lähetys epäonnistui: " + ex.Message);
+                    }
+                }
 
                 // Siirry Tiketti-sivulle, jos Status on päivitetty
                 switch (tikettitiedot.Status)
@@ -445,11 +603,10 @@ namespace TikettiDB.Controllers
             }
 
             ViewBag.Status = new SelectList(db.Tikettitiedot, "Status", "Status", tikettitiedot.Status);
-            ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
-
+            //ViewBag.itHenkiloID = new SelectList(db.IT_tukihenkilot, "itHenkiloID", "Sahkoposti", tikettitiedot.itHenkiloID);
+            ViewBag.itHenkiloID = db.IT_tukihenkilot.FirstOrDefault(k => k.Sahkoposti == tikettitiedot.Sahkoposti);
             return View(tikettitiedot);
         }
-
 
         // GET: Tikettitiedot/Delete/5
         public ActionResult Delete(int? id)
@@ -494,10 +651,6 @@ namespace TikettiDB.Controllers
             return RedirectToAction("Tiketti3");
         }
 
-        public ActionResult Tiketti()
-        {
-            return View();
-        }
 
         public ActionResult Kuittaus(int? TikettiID)
         {
@@ -516,6 +669,89 @@ namespace TikettiDB.Controllers
             return View(tikettitieto);
         }
 
+        public ActionResult OmatTiketit(int? searchID)
+        {
+            //Rajaus, kuka pääsee millekin sivulle
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+
+            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+            if (userLevel == 1 || userLevel == 2)
+            {
+                // Käyttäjällä on oikeus
+            }
+            else if (userLevel == 3)
+            {
+                // Käyttäjällä on taso 3, estä pääsy sivulle
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+            }
+
+            // Haetaan kirjautuneen käyttäjän säpo että sivulla näkyisi vain tietyn säpon jättämät tiketit
+            string sahkoposti = Session["Sahkoposti"].ToString();
+
+            // Suodatetaan tiketit kirjautuneen käyttäjän sähköpostiosoitteen perusteella, sekä
+            //sen perusteella onko tiketin status kesken vai valmis, että pääkäyttäjä näkisi saman
+            //näkymän kuin it-tukihenkilö, asiakkaalle näkyy ómat tiketit etusivulla
+            //ToList piti siirtää return viewiin, että haku toimi
+            var tikettitiedot = db.Tikettitiedot.Include(t => t.IT_tukihenkilot)
+                                    .Where(t => t.IT_tukihenkilot.Sahkoposti == sahkoposti)
+                                    .Where(t => t.Status == "Kesken" || t.Status == "Valmis");
+
+            // Suorita haku, jos searchID on suurempi kuin 0
+            if (searchID.HasValue && searchID.Value > 0)
+            {
+                tikettitiedot = tikettitiedot.Where(t => t.TikettiID == searchID.Value);
+            }
+
+            // Tallenna hakuarvo näkymään
+            ViewBag.currentFilter1 = searchID;
+
+            return View(tikettitiedot.ToList());
+        }
+
+        // Sähköpostin lähetysfunktio tiketin luomisesta
+        private void TikettiLuotu(string email, int tikettiID)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("tikettisovellus@gmail.com"); // Lähettäjän sähköpostiosoite
+                mail.To.Add(email);
+                mail.Subject = "Uusi tiketti luotu";
+                mail.Body = "Uusi tiketti on luotu onnistuneesti. Tikettisi käsittelynumero on: " + tikettiID;
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("tikettisovellus@gmail.com", "ennf waps osjw lxue");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
+        }
+
+        // Sähköpostin lähetysfunktio tiketin valmistumisesta
+        private void TikettiValmis(string email, int tikettiID)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("tikettisovellus@gmail.com"); // Lähettäjän sähköpostiosoite
+                mail.To.Add(email);
+                mail.Subject = "Tikettisi on ratkaistu";
+                mail.Body = "Tikettisi on nyt ratkaistu. Näet tiketin ratkaisun kirjautumalla Tikettijärjestelmään. Tikettisi käsittelynumero on " + tikettiID;
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential("tikettisovellus@gmail.com", "ennf waps osjw lxue");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -4,38 +4,43 @@
     ViewBag.Title = "Kirjaudu sisään";
 }
 
-<h2>Tervetuloa Tiketti-sovellukseen!</h2>
+@section scripts {
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            if (@ViewBag.LoginError == 1) {
+                $('#LoginRuutu').modal('show');
+            }
 
-@using (Html.BeginForm("Authorize", "Home", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <h5>Kirjoita käyttäjätunnuksesi sekä salasanasi.</h5>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Sahkoposti, "Käyttäjätunnus", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Sahkoposti, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Sahkoposti, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <label class="text-danger">
-            @Html.DisplayFor(model => model.LoginErrorMessage)
-        </label>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Kirjaudu sisään" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+        });
+    </script>
 }
 
+@{
+    Html.RenderPartial("_LoginModal");
+}
+<center>
+    <img src="~/Pictures/logo-vaaka.png" width="300" />
+
+</center>
+<div class="login-page-container">
+
+    @using (Html.BeginForm("Authorize", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row justify-content-around">
+            <div class="col-4">
+                <center>
+                    <p></p>
+                    <p><h2>Tervetuloa Tiketti-sovellukseen!</h2></p>
+                    <br />
+                    <p><button type="button" class="btn1" data-bs-toggle="modal" data-bs-target="#LoginRuutu">Kirjaudu</button></p>
+                </center>
+            </div>
+            <div class="col-4">
+                <img src="~/Pictures/hand.png" width="500" />
+            </div>
+        </div>
+
+    }
+</div>

@@ -8,84 +8,93 @@
 
 <h2>Valmiit tiketit</h2>
 <br />
-
-<table class="table table-hover">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TikettiID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PVM)
-        </th>
-        <th>
-            Asiakkaan nimi
-        </th>
-        <th>
-            Asiakkaan sähköposti
-        </th>
-        <th>
-            Ongelman kuvaus
-        </th>
-        <th>
-            Ratkaisun kuvaus
-        </th>
-        @*<th>
-            Laitteen nimi
-        </th>*@
-        <th>
-            IT-tukihenkilön sähköposti
-        </th>
-        <th>
-            Status
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+@using (Html.BeginForm("Tiketti3", "Tikettitiedot", FormMethod.Get))
+{
+    <br />
+    <div class="input-group">
+        <p class="px-1">@Html.Label("Etsi tiketin numerolla tai asiakkaan nimellä:")</p>
+        <p class="px-1">@Html.TextBox("hakutoiminto", ViewBag.currentFilter1 as string, new { @class = "form-control" })</p>
+        <p class="px-1"><input type="submit" value="Etsi" class="btn btn-default btn-sm" /></p>
+        <p class="px-1"><a href="@Url.Action("Tiketti3", "Tikettitiedot")" class="btn btn-default btn-sm">Tyhjennä</a></p>
+    </div>
+    <table class="table table-hover">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TikettiID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PVM)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Asiakastiedot.Sahkoposti)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Sahkoposti)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.TikettiID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PVM)
+            </th>
+            <th>
+                Asiakkaan nimi
+            </th>
+            <th>
+                Asiakkaan sähköposti
+            </th>
+            <th>
+                Ongelman kuvaus
+            </th>
+            <th>
+                Ratkaisun kuvaus
+            </th>
+            @*<th>
+                    Laitteen nimi
+                </th>*@
+            <th>
+                IT-tukihenkilön sähköposti
+            </th>
+            <th>
+                Status
+            </th>
 
-
-            <td>
-                <a href="@Url.Action("Edit", new { id = item.TikettiID })" class="btn btn-default">
-                    <i class="fas fa-edit"></i>
-                </a>
-
-                <a href="@Url.Action("Delete", new { id = item.TikettiID })" class="btn btn-danger">
-                    <i class="fas fa-trash-alt"></i>
-                </a>
-            </td>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TikettiID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PVM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Asiakastiedot.Etunimi) @Html.DisplayFor(modelItem => item.Asiakastiedot.Sukunimi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Asiakastiedot.Sahkoposti)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ongelman_kuvaus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.LaitteenTyyppi.Laitteen_nimi)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.IT_tukihenkilot.Sahkoposti)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
 
 
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.TikettiID })" class="btn btn-default">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <a href="@Url.Action("Delete", new { id = item.TikettiID })" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+}

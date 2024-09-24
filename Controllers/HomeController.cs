@@ -52,6 +52,7 @@ namespace TikettiDB.Controllers
             {
                 ViewBag.LoginMessage = "Successfull login";
                 ViewBag.LoggedStatus = "In";
+                ViewBag.LoginError = 0;
                 Session["Sahkoposti"] = LoggedUser.Sahkoposti;
 
                 // Hae käyttäjän taso tietokannasta Layoutissa olevaa navbaria varten
@@ -69,12 +70,13 @@ namespace TikettiDB.Controllers
                         return RedirectToAction("Index", "Tikettitiedot");
                     default:
                         // Käyttäjällä ei ole määriteltyä tasoa
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Login", "Home");
                 }
             }
             else
             {
                 ViewBag.LoginMessage = "Login unsuccessfull";
+                ViewBag.LoggedStatus = "Out";
                 ViewBag.LoginError = 1;
                 LoginModel.LoginErrorMessage = "Tuntematon käyttäjätunnus tai salasana.";
                 return View("Login", LoginModel);

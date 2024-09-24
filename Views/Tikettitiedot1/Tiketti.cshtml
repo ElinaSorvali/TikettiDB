@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
+
+@{
+    ViewBag.Title = "Tiketti";
+}
+
+<h2>Tiketti-järjestelmä</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <p>Tervetuloa tikettien käsittelyyn, valitse ylläolevista vaihtoehdoista!</p>
+    <p></p>
+    @*string LoggedStatus = "";
+    if (Session["Sahkoposti"] == null)
+    {
+        LoggedStatus = "Ole hyvä ja kirjaudu järjestelmään";
+    }
+    else
+    {
+        LoggedStatus = "Näet jättämäsi tiketit sähköpostilla: " + Session["Sahkoposti"];
+    }
+
+    <p>@LoggedStatus</p>
+
+    <table class="table table-hover">
+        <tr>
+            <th>
+                Tiketin numero
+            </th>
+
+            <th>
+                Status
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TikettiID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.TikettiID })" class="btn btn-default btn-sm">Ota tiketti käsittelyyn</a>
+                </td>
+            </tr>
+        }
+
+    </table>*@
+
+
+
+    <br />
+
+
+
+
+}

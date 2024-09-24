@@ -4,6 +4,7 @@
     ViewBag.Title = "Tee uusi tiketti";
 }
 <br />
+@*Asiakkaan näkemä sivu kun kirjautuu sisään*@
 <h2>Tervetuloa jättämään tiketti!</h2>
 <h4>Valitse allaolevista vaihtoehdoista.</h4>
 <br />
@@ -11,5 +12,59 @@
 
     <a href="~/Tikettitiedot/Create" class="btn btn-default">Laiteongelma</a>
     <a href="~/Tikettitiedot/Create2" class="btn btn-default">Yhteysongelma</a>
-
 </p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <p></p>
+    string LoggedStatus = "";
+    if (Session["Sahkoposti"] == null)
+    {
+        LoggedStatus = "Ole hyvä ja kirjaudu järjestelmään";
+    }
+    else
+    {
+        LoggedStatus = "Näet sähköpostilla " + Session["Sahkoposti"] + " jättämäsi tiketit.";
+    }
+
+    <p>@LoggedStatus</p>
+    <div class="input-group">
+        <p class="px-1">@Html.Label("Etsi tiketin numerolla:")</p>
+        <p class="px-1">@Html.TextBox("searchID", ViewBag.currentFilter1 as string, new { @class = "form-control" })</p>
+        <p class="px-1"><input type="submit" value="Etsi" class="btn btn-default btn-sm" /></p>
+        <p class="px-1"><a href="@Url.Action("Index", "Tikettitiedot")" class="btn btn-default btn-sm">Tyhjennä</a></p>
+    </div>
+    <table class="table table-hover" style="width:20%">
+        <tr>
+            <th>
+                Tiketin numero
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Ratkaisu
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TikettiID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RatkaisunKuvaus)
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br />
+}

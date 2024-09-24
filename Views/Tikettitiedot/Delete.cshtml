@@ -21,7 +21,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Ongelman_kuvaus)
+            Tiketin numero
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TikettiID)
+        </dd>
+
+        <dt>
+            Ongelman kuvaus
         </dt>
 
         <dd>
@@ -29,23 +37,23 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Asiakastiedot.Etunimi)
+            Asiakkaan nimi
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Asiakastiedot.Etunimi)
+            @Html.DisplayFor(model => model.Asiakastiedot.Etunimi) @Html.DisplayFor(model => model.Asiakastiedot.Sukunimi)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.IT_tukihenkilot.Etunimi)
+            It-tukihenkilön nimi
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IT_tukihenkilot.Etunimi)
+            @Html.DisplayFor(model => model.IT_tukihenkilot.Etunimi) @Html.DisplayFor(model => model.IT_tukihenkilot.Sukunimi)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LaitteenTyyppi.Laitteen_nimi)
+            Laitteen nimi
         </dt>
 
         <dd>
@@ -53,11 +61,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.YhteydenTyyppi.Yhteyden_tyyppi)
+            Ratkaisun kuvaus
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.YhteydenTyyppi.Yhteyden_tyyppi)
+            @Html.DisplayFor(model => model.RatkaisunKuvaus)
         </dd>
 
     </dl>

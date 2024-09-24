@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -182,83 +183,183 @@ namespace TikettiDB.Controllers
             }
 
             ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro", asiakastiedot.Postinro);
-            //virheenkäsittelyä
+            return View(asiakastiedot);
+        }
+
+       
+
+        // GET: Asiakastiedot/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"];
+            if (userLevel == 1)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 2 || userLevel == 3)
+            {
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error");
+            }
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
+
+            if (asiakastiedot == null)
+            {
+                return HttpNotFound();
+            }
+
+            Sijainti sijainti = db.Sijainti.Find(asiakastiedot.SijaintiID);
+            ViewBag.Osoite = sijainti?.Osoite;
+            //Hae kaikki postinumerot Postinumero-taulusta
+            var kaikkiPostinumerot = db.Postinumero.ToList();
+            ViewBag.Postinro = new SelectList(kaikkiPostinumerot, "Postinro", "Postinro", sijainti?.Postinro);
+
+            // Hae kirjautumistiedot
+            Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
+            ViewBag.Salasana = kirjautuminen?.Salasana;
+
+            return View(asiakastiedot);
+        }
+
+        //// POST: Asiakastiedot/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "AsiakasID,SijaintiID,Etunimi,Sukunimi,Puhelinnro,Postinro,Sahkoposti,Osoite")] Asiakastiedot asiakastiedot)
+        {
+            if (ModelState.IsValid)
+            {
+                //Hae alkuperäiset asiakastiedot
+                var valmiitAsiakastiedot = db.Asiakastiedot.Include(a => a.Sijainti)
+            .FirstOrDefault(a => a.AsiakasID == asiakastiedot.AsiakasID);
+                if (valmiitAsiakastiedot == null) return HttpNotFound();
+
+                //Päivitä asiakastiedot
+                valmiitAsiakastiedot.Etunimi = asiakastiedot.Etunimi;
+                valmiitAsiakastiedot.Sukunimi = asiakastiedot.Sukunimi;
+                valmiitAsiakastiedot.Puhelinnro = asiakastiedot.Puhelinnro;
+                valmiitAsiakastiedot.Sahkoposti = asiakastiedot.Sahkoposti;
+
+                //Päivitä liittyvä sijainti, jos se löytyy
+                var valmisSijainti = db.Sijainti.Find(valmiitAsiakastiedot.SijaintiID);
+                if (valmisSijainti != null)
+                {
+                    valmisSijainti.Osoite = asiakastiedot.Osoite;
+                    valmisSijainti.Postinro = asiakastiedot.Postinro;
+                }
+
+                //päivitä kirjautumistiedot
+                var kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == valmiitAsiakastiedot.Sahkoposti);
+                if (kirjautuminen != null && kirjautuminen.Sahkoposti != asiakastiedot.Sahkoposti)
+                {
+                    kirjautuminen.Sahkoposti = asiakastiedot.Sahkoposti;
+                }
+                //tallenna
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Postinro = new SelectList(db.Sijainti, "Postinro", "Postinro", asiakastiedot.Postinro);
+            ViewBag.Salasana = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti)?.Salasana;
+
+            return View(asiakastiedot);
+        }
+
+        // GET: Asiakastiedot/ModalEdit/5
+        public ActionResult _ModalEdit(int? id)
+        {
+            if (Session["Sahkoposti"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            int userLevel = (int)Session["Taso"];
+            if (userLevel == 1)
+            {
+                // Käyttäjällä on oikeus kaikkiin sivuihin
+            }
+            else if (userLevel == 2 || userLevel == 3)
+            {
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                return View("Error");
+            }
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
+
+            if (asiakastiedot == null)
+            {
+                return HttpNotFound();
+            }
+
+            Sijainti sijainti = db.Sijainti.Find(asiakastiedot.SijaintiID);
+            ViewBag.Osoite = sijainti?.Osoite;
+            //Hae kaikki postinumerot Postinumero-taulusta
+            var kaikkiPostinumerot = db.Postinumero.ToList();
+            ViewBag.Postinro = new SelectList(kaikkiPostinumerot, "Postinro", "Postinro", sijainti?.Postinro);
+
+            // Hae kirjautumistiedot
+            Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
+            ViewBag.Salasana = kirjautuminen?.Salasana;
+
             return PartialView(asiakastiedot);
         }
 
-        //OHJELMASSA EI OLE EDITTIÄ
-        // GET: Asiakastiedot/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (Session["Sahkoposti"] == null)
-        //    {
-        //        return RedirectToAction("Login", "Home");
-        //    }
+        //// POST: Asiakastiedot/ModalEdit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _ModalEdit([Bind(Include = "AsiakasID,SijaintiID,Etunimi,Sukunimi,Puhelinnro,Postinro,Sahkoposti,Osoite")] Asiakastiedot asiakastiedot)
+        {
+            if (ModelState.IsValid)
+            {
+                //Hae alkuperäiset asiakastiedot
+                var valmiitAsiakastiedot = db.Asiakastiedot.Include(a => a.Sijainti)
+            .FirstOrDefault(a => a.AsiakasID == asiakastiedot.AsiakasID);
+                if (valmiitAsiakastiedot == null) return HttpNotFound();
 
-        //    int userLevel = (int)Session["Taso"];
+                //Päivitä asiakastiedot
+                valmiitAsiakastiedot.Etunimi = asiakastiedot.Etunimi;
+                valmiitAsiakastiedot.Sukunimi = asiakastiedot.Sukunimi;
+                valmiitAsiakastiedot.Puhelinnro = asiakastiedot.Puhelinnro;
+                valmiitAsiakastiedot.Sahkoposti = asiakastiedot.Sahkoposti;
 
-        //    if (userLevel == 1)
-        //    {
-        //        // Käyttäjällä on oikeus kaikkiin sivuihin
-        //    }
-        //    else if (userLevel == 2 || userLevel == 3)
-        //    {
-        //        ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
-        //        return View("Error");
-        //    }
+                //Päivitä liittyvä sijainti, jos se löytyy
+                var valmisSijainti = db.Sijainti.Find(valmiitAsiakastiedot.SijaintiID);
+                if (valmisSijainti != null)
+                {
+                    valmisSijainti.Osoite = asiakastiedot.Osoite;
+                    valmisSijainti.Postinro = asiakastiedot.Postinro;
+                }
 
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
+                //päivitä kirjautumistiedot
+                //var kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == valmiitAsiakastiedot.Sahkoposti);
+                //if (kirjautuminen != null && kirjautuminen.Sahkoposti != asiakastiedot.Sahkoposti)
+                //{
+                //    kirjautuminen.Sahkoposti = asiakastiedot.Sahkoposti;
+                //}
+                //tallenna
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-        //    Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
+            ViewBag.Postinro = new SelectList(db.Sijainti, "Postinro", "Postinro", asiakastiedot.Postinro);
+            //ViewBag.Salasana = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti)?.Salasana;
 
-        //    if (asiakastiedot == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
+            //return PartialView("_ModalEdit", asiakastiedot);
+            return PartialView(asiakastiedot);
+        }
 
-        //    Sijainti sijainti = db.Sijainti.Find(asiakastiedot.SijaintiID);
-        //    ViewBag.Osoite = sijainti?.Osoite;
 
-        //    Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
-        //    ViewBag.Salasana = kirjautuminen?.Salasana;
-
-        //    ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro", asiakastiedot.Postinro);
-
-        //    return View(asiakastiedot);
-        //}
-
-        //// POST: Asiakastiedot/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "AsiakasID,SijaintiID,Etunimi,Sukunimi,Puhelinnro,Osoite,Postinro,Sahkoposti")] Asiakastiedot asiakastiedot)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Päivitä Asiakastiedot-tiedot tietokantaan
-        //        db.Entry(asiakastiedot).State = EntityState.Modified;
-
-        //        // Päivitä myös Kirjautuminen-tiedot
-        //        Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
-        //        if (kirjautuminen != null)
-        //        {
-        //            if (kirjautuminen.Sahkoposti != asiakastiedot.Sahkoposti)
-        //            {
-        //                kirjautuminen.Sahkoposti = asiakastiedot.Sahkoposti;
-        //            }
-        //        }
-
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro", asiakastiedot.Postinro);
-        //    ViewBag.Salasana = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti)?.Salasana;
-
-        //    return View(asiakastiedot);
-        //}
         // GET: Asiakastiedot/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -311,15 +412,31 @@ namespace TikettiDB.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult _ModalDeleteConfirmed(int id)
         {
+            // Etsi Asiakastiedot
             Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
 
+            if (asiakastiedot == null)
+            {
+                return HttpNotFound();
+            }
+
             // Poista liittyvät tiedot Kirjautuminen-taulusta
-            Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Kirjautuminen.Sahkoposti);
-            db.Kirjautuminen.Remove(kirjautuminen);
+            Kirjautuminen kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == asiakastiedot.Sahkoposti);
+            if (kirjautuminen != null)
+            {
+                db.Kirjautuminen.Remove(kirjautuminen);
+            }
+
+            // Poista kaikki LaitteenTyyppi-tietueet, jotka viittaavat kyseiseen SijaintiID:hen
+            var liittyvatLaitteet = db.LaitteenTyyppi.Where(l => l.SijaintiID == asiakastiedot.SijaintiID).ToList();
+            db.LaitteenTyyppi.RemoveRange(liittyvatLaitteet);
 
             // Poista liittyvät tiedot Sijainti-taulusta
             Sijainti sijainti = db.Sijainti.Find(asiakastiedot.SijaintiID);
-            db.Sijainti.Remove(sijainti);
+            if (sijainti != null)
+            {
+                db.Sijainti.Remove(sijainti);
+            }
 
             // Poista itse Asiakastiedot
             db.Asiakastiedot.Remove(asiakastiedot);
@@ -328,6 +445,7 @@ namespace TikettiDB.Controllers
 
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {

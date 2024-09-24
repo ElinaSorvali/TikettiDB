@@ -1,19 +1,32 @@
-﻿@model TikettiDB.Models.Tikettitiedot
+﻿@model IEnumerable<TikettiDB.Models.Tikettitiedot>
 
 @{
     ViewBag.Title = "Tiketti";
 }
 
-<h2>Tiketti-järjestelmä</h2>
+@*Pääkäyttäjän ja it-tukihenkilön näkemä sivu kun kirjautuu sisään*@
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div class="page-container">
+    <div class="content-container">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-7">
+                    <center>
+                        <h2>Tiketti-järjestelmä</h2>
 
+                        <p>Tervetuloa tikettien käsittelyyn!<br />
+                        Valitse ylläolevista vaihtoehdoista!</p>
+                    </center>
+                    <p></p>
+                    <br />
+                </div>
 
-  <p>Tervetuloa tikettien käsittelyyn, valitse ylläolevista vaihtoehdoista!</p>
-  <p></p>
-  <br />
-
-
-}
+                <div class="col-4">
+                    <img src="~/Pictures/kuva1.png" width="500" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

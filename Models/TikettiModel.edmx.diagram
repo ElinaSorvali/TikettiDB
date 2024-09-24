@@ -5,23 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="afffec79c009444888776f9ab5bc3778" Name="Diagram1">
-        <EntityTypeShape EntityType="TikettiDBModel.Asiakastiedot" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.IT_tukihenkilot" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.Kirjautuminen" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.LaitteenTyyppi" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.Postinumero" Width="1.5" PointX="1.5" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.Sijainti" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.Tikettitiedot" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TikettiDBModel.YhteydenTyyppi" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
-        <AssociationConnector Association="TikettiDBModel.FK_Asiakastiedot_Kirjautuminen" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Asiakastiedot_Sijainti" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_Asiakastiedot" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_IT_tukihenkilot_Kirjautuminen" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_IT_tukihenkilot" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_LaitteenTyyppi_Sijainti" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_LaitteenTyyppi" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Sijainti_Postinumero" ManuallyRouted="false" />
-        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_YhteydenTyyppi" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TikettiDBModel.Asiakastiedot" Width="1.5" PointX="3" PointY="3.875" />
+        <EntityTypeShape EntityType="TikettiDBModel.IT_tukihenkilot" Width="1.5" PointX="3" PointY="7.625" />
+        <EntityTypeShape EntityType="TikettiDBModel.Kirjautuminen" Width="1.5" PointX="0.75" PointY="4.25" />
+        <EntityTypeShape EntityType="TikettiDBModel.LaitteenTyyppi" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="TikettiDBModel.Postinumero" Width="1.5" PointX="1.5" PointY="11.625" />
+        <EntityTypeShape EntityType="TikettiDBModel.Sijainti" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TikettiDBModel.Tikettitiedot" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="TikettiDBModel.YhteydenTyyppi" Width="1.5" PointX="3" PointY="14.5" />
+        <AssociationConnector Association="TikettiDBModel.FK_Asiakastiedot_Kirjautuminen" />
+        <AssociationConnector Association="TikettiDBModel.FK_Asiakastiedot_Sijainti" />
+        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_Asiakastiedot" />
+        <AssociationConnector Association="TikettiDBModel.FK_IT_tukihenkilot_Kirjautuminen" />
+        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_IT_tukihenkilot" />
+        <AssociationConnector Association="TikettiDBModel.FK_LaitteenTyyppi_Sijainti" />
+        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_LaitteenTyyppi" />
+        <AssociationConnector Association="TikettiDBModel.FK_Sijainti_Postinumero" />
+        <AssociationConnector Association="TikettiDBModel.FK_Tikettitiedot_YhteydenTyyppi" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

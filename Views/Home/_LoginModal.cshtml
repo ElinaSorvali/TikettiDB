@@ -1,0 +1,55 @@
+﻿@model TikettiDB.Models.Kirjautuminen
+
+@{
+    ViewBag.Title = "_LoginModal";
+}
+
+
+@*Modal ikkuna*@
+<div class="modal" id="LoginRuutu">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bg-img">
+                @*Tässä on taustakuva*@
+                <div class="modal-header">
+                    <p></p>
+                    <h4>Kirjautuminen Tiketti-järjestelmään</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Authorize", "Home", FormMethod.Post, new { id = "loginForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Sahkoposti, "Käyttäjätunnus", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Sahkoposti, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Sahkoposti, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Salasana, "Salasana", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Salasana, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Salasana, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <label class="text-danger">
+                            @Html.DisplayFor(model => model.LoginErrorMessage)
+                        </label>
+
+                        <div class="modal-footer">
+                            <div>
+                                <button type="submit" class="btn btn-default">Kirjaudu</button>
+                                <a href="@Url.Action("Login", "Home")" class="btn btn-secondary">Peruuta</a>
+
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
