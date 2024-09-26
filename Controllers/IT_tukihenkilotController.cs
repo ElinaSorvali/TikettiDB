@@ -307,8 +307,6 @@ namespace TikettiDB.Controllers
 
             ViewBag.Sahkoposti = new SelectList(db.Kirjautuminen, "Taso", "Taso", iT_tukihenkilot.Sahkoposti);
             ViewBag.Salasana = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == iT_tukihenkilot.Sahkoposti)?.Salasana;
-            //return View(iT_tukihenkilot);
-            //return PartialView("_EditModal", iT_tukihenkilot);
             return PartialView(iT_tukihenkilot);
         }
 

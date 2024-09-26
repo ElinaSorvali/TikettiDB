@@ -242,6 +242,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="package.json" />
     <Content Include="cypress\fixtures\example.json" />
+    <None Include="Properties\PublishProfiles\TikettiDB20240925122125 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\chart.js" />
     <Content Include="Scripts\chart.min.js" />

@@ -341,12 +341,6 @@ namespace TikettiDB.Controllers
                     valmisSijainti.Postinro = asiakastiedot.Postinro;
                 }
 
-                //päivitä kirjautumistiedot
-                //var kirjautuminen = db.Kirjautuminen.FirstOrDefault(k => k.Sahkoposti == valmiitAsiakastiedot.Sahkoposti);
-                //if (kirjautuminen != null && kirjautuminen.Sahkoposti != asiakastiedot.Sahkoposti)
-                //{
-                //    kirjautuminen.Sahkoposti = asiakastiedot.Sahkoposti;
-                //}
                 //tallenna
                 db.SaveChanges();
                 return RedirectToAction("Index");

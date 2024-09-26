@@ -40,6 +40,7 @@ namespace TikettiDB.Controllers
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
 
+            //ASIAKKAALLA NÄKYVÄT TIKETIT ETUSIVULLA
             // Haetaan kirjautuneen käyttäjän säpo että indexissä näkyisi vain asiakkaan säpon jättämät tiketit
             string sahkoposti = Session["Sahkoposti"].ToString();
 
@@ -99,7 +100,7 @@ namespace TikettiDB.Controllers
                 .Include(t => t.LaitteenTyyppi)
                 .Include(t => t.YhteydenTyyppi);
 
-
+            //TIKETISSÄ HAKU TIKETTIID:LLÄ TAI ASIAKKAAN NIMELLÄ
             //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
             if (!string.IsNullOrEmpty(hakutoiminto))
             {
@@ -338,9 +339,10 @@ namespace TikettiDB.Controllers
                 // Tallenna muutokset
                 db.SaveChanges();
 
-                // Sähköpostin lähetys
+                //Sähköpostin lähetys asiakkaalle kun tiketti on luotu
+                //Kutsutaan TikettiLuoto-metodia, parametrinä asiakkaan säpo ja tikettiID
                 TikettiLuotu(tikettitieto.Sahkoposti, tikettitieto.TikettiID);
-
+                //Ohjataan Kuittaus-sivulle
                 return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
             }
 
@@ -468,9 +470,10 @@ namespace TikettiDB.Controllers
                 // Tallenna muutokset
                 db.SaveChanges();
 
-                // Sähköpostin lähetys
+                //Sähköpostin lähetys asiakkaalle kun tiketti on luotu
+                //Kutsutaan TikettiLuoto-metodia, parametrinä asiakkaan säpo ja tikettiID
                 TikettiLuotu(tikettitieto.Sahkoposti, tikettitieto.TikettiID);
-
+                //Ohjataan Kuittaus-sivulle
                 return RedirectToAction("Kuittaus", new { tikettiID = tikettitieto.TikettiID });
             }
 
@@ -511,7 +514,7 @@ namespace TikettiDB.Controllers
             // Hae kirjautuneen käyttäjän sähköposti istunnosta
             string userEmail = Session["Sahkoposti"]?.ToString();
 
-            // Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
+            //Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
             int? loggedInItHenkiloID = db.IT_tukihenkilot
                 .Where(h => h.Sahkoposti == userEmail)
                 .Select(h => h.itHenkiloID)
@@ -538,7 +541,6 @@ namespace TikettiDB.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 // Etsi olemassa oleva tieto Tikettitiedot tietokannasta
                 Tikettitiedot vanhaTiketti = db.Tikettitiedot.Find(tikettitiedot.TikettiID);
 
@@ -571,24 +573,27 @@ namespace TikettiDB.Controllers
                 //Tallenna muutettu tietue tietokantaan
                 db.SaveChanges();
 
-                // Hae asiakkaan sähköpostiosoite Asiakastiedot-taulusta
+                //Hakee asiakkaan säpon tietokannasta Asiakastiedot-taulusta asiakasID:n perusteella
                 var asiakkaanSahkoposti = db.Asiakastiedot
                     .Where(a => a.AsiakasID == vanhaTiketti.AsiakasID)
                     .Select(a => a.Sahkoposti)
                     .FirstOrDefault();
 
-                // Lähetä sähköposti, jos Status on "Valmis" ja sähköpostiosoite ei ole tyhjä
+                //Tarkistaa, onko tiketin status "Valmis" ja onko asiakkaalla säpo
                 if (tikettitiedot.Status == "Valmis" && !string.IsNullOrEmpty(asiakkaanSahkoposti))
                 {
                     try
                     {
+                        //Lähettää valmis-ilmoitus asiakkaalle
                         TikettiValmis(asiakkaanSahkoposti, tikettitiedot.TikettiID);
                     }
                     catch (Exception ex)
                     {
+                        //Jos säpon lähetys epäonnistuu, virheilmoitus
                         ModelState.AddModelError("", "Sähköpostin lähetys epäonnistui: " + ex.Message);
                     }
                 }
+
 
                 // Siirry Tiketti-sivulle, jos Status on päivitetty
                 switch (tikettitiedot.Status)
@@ -651,7 +656,6 @@ namespace TikettiDB.Controllers
             return RedirectToAction("Tiketti3");
         }
 
-
         public ActionResult Kuittaus(int? TikettiID)
         {
             if (TikettiID == null)
@@ -696,7 +700,7 @@ namespace TikettiDB.Controllers
             // Suodatetaan tiketit kirjautuneen käyttäjän sähköpostiosoitteen perusteella, sekä
             //sen perusteella onko tiketin status kesken vai valmis, että pääkäyttäjä näkisi saman
             //näkymän kuin it-tukihenkilö, asiakkaalle näkyy ómat tiketit etusivulla
-            //ToList piti siirtää return viewiin, että haku toimi
+            //ToList piti siirtää return viewiin, että toimi
             var tikettitiedot = db.Tikettitiedot.Include(t => t.IT_tukihenkilot)
                                     .Where(t => t.IT_tukihenkilot.Sahkoposti == sahkoposti)
                                     .Where(t => t.Status == "Kesken" || t.Status == "Valmis");
@@ -718,10 +722,10 @@ namespace TikettiDB.Controllers
         {
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("tikettisovellus@gmail.com"); // Lähettäjän sähköpostiosoite
+                mail.From = new MailAddress("tikettisovellus@gmail.com"); //Lähettäjän sähköpostiosoite
                 mail.To.Add(email);
                 mail.Subject = "Uusi tiketti luotu";
-                mail.Body = "Uusi tiketti on luotu onnistuneesti. Tikettisi käsittelynumero on: " + tikettiID;
+                mail.Body = "Uusi tiketti on luotu onnistuneesti. Tikettisi käsittelynumero on " + tikettiID;
                 mail.IsBodyHtml = true;
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
@@ -738,7 +742,7 @@ namespace TikettiDB.Controllers
         {
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("tikettisovellus@gmail.com"); // Lähettäjän sähköpostiosoite
+                mail.From = new MailAddress("tikettisovellus@gmail.com"); //Lähettäjän sähköpostiosoite
                 mail.To.Add(email);
                 mail.Subject = "Tikettisi on ratkaistu";
                 mail.Body = "Tikettisi on nyt ratkaistu. Näet tiketin ratkaisun kirjautumalla Tikettijärjestelmään. Tikettisi käsittelynumero on " + tikettiID;

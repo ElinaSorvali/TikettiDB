@@ -117,9 +117,6 @@
                 @Html.DisplayFor(modelItem => item.Kirjautuminen.Taso)
             </td>
             <td>
-                @*<a href="@Url.Action("Edit", new { id = item.itHenkiloID })" class="btn btn-default">
-                    <i class="fas fa-edit"></i>
-                </a>*@
                 <button class="btn btn-primary edititHenkiloID fas fa-edit" data-itid="@item.itHenkiloID" data-toggle="modal" data-target="#editModal">
                 </button>
                 <button class="btn btn-danger haeitHenkiloID fas fa-trash-alt" data-itid="@item.itHenkiloID" data-toggle="modal" data-target="#deleteModal">

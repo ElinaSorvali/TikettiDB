@@ -130,10 +130,6 @@
                     @Html.DisplayFor(modelItem => item.Kirjautuminen.Salasana)
                 </td>*@
             <td>
-                @*<a href="@Url.Action("Edit", new { id = item.AsiakasID })" class="btn btn-default">
-                        <i class="fas fa-edit"></i>
-                    </a>*@
-
                 <button class="btn btn-primary editAsiakasID fas fa-edit" data-atid="@item.AsiakasID" data-toggle="modal" data-target="#modalEdit">
                 </button>
                 <button class="btn btn-danger haeAsiakasID fas fa-trash-alt" data-atid="@item.AsiakasID" data-toggle="modal" data-target="#modalDelete">
