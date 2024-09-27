@@ -21,7 +21,7 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot
         public ActionResult Index(int? searchID)
         {
-            //Rajaus, kuka pääsee millekin sivulle
+#region//Rajaus, kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -39,9 +39,10 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
 
             //ASIAKKAALLA NÄKYVÄT TIKETIT ETUSIVULLA
-            // Haetaan kirjautuneen käyttäjän säpo että indexissä näkyisi vain asiakkaan säpon jättämät tiketit
+            //Haetaan kirjautuneen käyttäjän säpo että indexissä näkyisi vain asiakkaan säpon jättämät tiketit
             string sahkoposti = Session["Sahkoposti"].ToString();
 
             // Suodatetaan tiketit kirjautuneen käyttäjän sähköpostiosoitteen perusteella
@@ -75,61 +76,34 @@ namespace TikettiDB.Controllers
         }
         public ActionResult Tiketti1(string hakutoiminto)
         {
-            if (Session["Sahkoposti"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
+        #region//Rajaus kuka pääsee millekin sivulle
+                    if (Session["Sahkoposti"] == null)
+                    {
+                        return RedirectToAction("Login", "Home");
+                    }
+                    int userLevel = (int)Session["Taso"]; // Ota käyttäjän taso istunnosta
 
-            // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
-            if (userLevel == 1 || userLevel == 2)
-            {
-                // Käyttäjällä on oikeus kaikkiin sivuihin
-            }
-            else if (userLevel == 3)
-            {
-                // Käyttäjällä on taso 3, estää pääsyn sivuille
-                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
-                return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
-            }
+                    // Tarkista käyttäjän taso ja estä pääsy tietyille sivuille
+                    if (userLevel == 1 || userLevel == 2)
+                    {
+                        // Käyttäjällä on oikeus kaikkiin sivuihin
+                    }
+                    else if (userLevel == 3)
+                    {
+                        // Käyttäjällä on taso 3, estää pääsyn sivuille
+                        ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                        return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
+                    }
+                    #endregion
 
-            var tikettitiedot = db.Tikettitiedot
-                .Where(t => t.Status == "Uusi")
-                .Include(t => t.Asiakastiedot)
-                .Include(t => t.IT_tukihenkilot)
-                .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi);
-
-            //TIKETISSÄ HAKU TIKETTIID:LLÄ TAI ASIAKKAAN NIMELLÄ
-            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
-            if (!string.IsNullOrEmpty(hakutoiminto))
-            {
-                //hakukysely numeroksi TikettiID:tä varten
-                int tikettiID;
-                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
-
-                if (isNumeric)
-                {
-                    //Hae TikettiID:n perusteella osittain (muunna string että voi hakea vain osalla)
-                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
-                }
-                else
-                {
-                    // Hae asiakkaan etu- tai sukunimen perusteella
-                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
-                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
-                }
-            }
-
-            // tallenna näkymään
+            var tikettitiedot = HaeTikettiTiedot("Uusi", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
-
             return View(tikettitiedot.ToList());
-
         }
 
         public ActionResult Tiketti2(string hakutoiminto)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -147,42 +121,16 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
-            var tikettitiedot = db.Tikettitiedot
-                .Where(t => t.Status == "Kesken")
-                .Include(t => t.Asiakastiedot)
-                .Include(t => t.IT_tukihenkilot)
-                .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi);
+            #endregion
 
-            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
-            if (!string.IsNullOrEmpty(hakutoiminto))
-            {
-                //hakukysely numeroksi TikettiID:tä varten
-                int tikettiID;
-                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
-
-                if (isNumeric)
-                {
-                    // Hae TikettiID:n perusteella osittain (muunna merkkijonoksi)
-                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
-                }
-                else
-                {
-                    // Hae asiakkaan etu- tai sukunimen perusteella
-                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
-                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
-                }
-            }
-
-            // tallenna näkymään
+            var tikettitiedot = HaeTikettiTiedot("Kesken", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
-
             return View(tikettitiedot.ToList());
-
         }
 
         public ActionResult Tiketti3(string hakutoiminto)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -200,43 +148,18 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
-            var tikettitiedot = db.Tikettitiedot
-                .Where(t => t.Status == "Valmis")
-                .Include(t => t.Asiakastiedot)
-                .Include(t => t.IT_tukihenkilot)
-                .Include(t => t.LaitteenTyyppi)
-                .Include(t => t.YhteydenTyyppi);
+            #endregion
 
-            //haku TikettiID:n tai asiakkaan nimen perusteella, jos "hakutoiminto" ei ole tyhjä
-            if (!string.IsNullOrEmpty(hakutoiminto))
-            {
-                //hakukysely numeroksi TikettiID:tä varten
-                int tikettiID;
-                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
-
-                if (isNumeric)
-                {
-                    // Hae TikettiID:n perusteella osittain (muunna merkkijonoksi)
-                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
-                }
-                else
-                {
-                    // Hae asiakkaan etu- tai sukunimen perusteella
-                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
-                                                        || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
-                }
-            }
-
-            // tallenna näkymään
+            var tikettitiedot = HaeTikettiTiedot("Valmis", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
-
             return View(tikettitiedot.ToList());
-
         }
+
 
         // Laiteongelman create
         public ActionResult Create()
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             //Rajaus, kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
@@ -255,6 +178,7 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
             return View();
         }
 
@@ -353,7 +277,7 @@ namespace TikettiDB.Controllers
         // Yhteysongelman create
         public ActionResult Create2()
         {
-            //Rajaus, kuka pääsee millekin sivulle
+#region//Rajaus, kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -371,6 +295,7 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
             ViewBag.Yhteyden_tyyppi = new SelectList(db.YhteydenTyyppi, "Yhteyden_tyyppi", "Yhteyden_tyyppi");
             return View();
         }
@@ -485,6 +410,7 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot/Edit/5
         public ActionResult Edit(int? id)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -502,6 +428,8 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -616,6 +544,7 @@ namespace TikettiDB.Controllers
         // GET: Tikettitiedot/Delete/5
         public ActionResult Delete(int? id)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -633,6 +562,8 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -675,6 +606,7 @@ namespace TikettiDB.Controllers
 
         public ActionResult OmatTiketit(int? searchID)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             //Rajaus, kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
@@ -690,9 +622,10 @@ namespace TikettiDB.Controllers
             else if (userLevel == 3)
             {
                 // Käyttäjällä on taso 3, estä pääsy sivulle
-                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
+                ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän ja it-tuen toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
 
             // Haetaan kirjautuneen käyttäjän säpo että sivulla näkyisi vain tietyn säpon jättämät tiketit
             string sahkoposti = Session["Sahkoposti"].ToString();
@@ -756,6 +689,40 @@ namespace TikettiDB.Controllers
                 }
             }
         }
+
+        //Tämä metodi suorittaa hakulogiikan
+        private IQueryable<Tikettitiedot> HaeTikettiTiedot(string status, string hakutoiminto)
+        {
+            // Hae tiketit tietokannasta ja sisällytä liittyvät tiedot
+            var tikettitiedot = db.Tikettitiedot
+                .Where(t => t.Status == status)
+                .Include(t => t.Asiakastiedot)
+                .Include(t => t.IT_tukihenkilot)
+                .Include(t => t.LaitteenTyyppi)
+                .Include(t => t.YhteydenTyyppi);
+
+            // Jos hakutoiminto ei ole tyhjä, suodatetaan tuloksia hakutoiminnon perusteella
+            if (!string.IsNullOrEmpty(hakutoiminto))
+            {
+                int tikettiID;
+                bool isNumeric = int.TryParse(hakutoiminto, out tikettiID);
+
+                if (isNumeric)
+                {
+                    // Hae TikettiID:n perusteella
+                    tikettitiedot = tikettitiedot.Where(t => t.TikettiID.ToString().Contains(hakutoiminto));
+                }
+                else
+                {
+                    // Hae asiakkaan etu- tai sukunimen perusteella
+                    tikettitiedot = tikettitiedot.Where(t => t.Asiakastiedot.Etunimi.Contains(hakutoiminto)
+                                                          || t.Asiakastiedot.Sukunimi.Contains(hakutoiminto));
+                }
+            }
+
+            return tikettitiedot;
+        }
+
 
         protected override void Dispose(bool disposing)
         {

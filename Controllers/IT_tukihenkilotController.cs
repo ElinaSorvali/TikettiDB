@@ -17,6 +17,7 @@ namespace TikettiDB.Controllers
         // GET: IT_tukihenkilot
         public ActionResult Index()
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             //if (Session["Sahkoposti"] == null)
             //{
             //    return RedirectToAction("Login", "Home");
@@ -34,6 +35,8 @@ namespace TikettiDB.Controllers
             //    ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
             //    return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             //}
+            #endregion
+
             var iT_tukihenkilot = db.IT_tukihenkilot.Include(i => i.Kirjautuminen);
             return View(iT_tukihenkilot.ToList());
         }
@@ -42,6 +45,7 @@ namespace TikettiDB.Controllers
         // GET: IT_tukihenkilot/Create
         public ActionResult Create()
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             //if (Session["Sahkoposti"] == null)
             //{
             //    return RedirectToAction("Login", "Home");
@@ -59,6 +63,8 @@ namespace TikettiDB.Controllers
             //    ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
             //    return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             //}
+            #endregion
+
             return View();
         }
 
@@ -315,6 +321,7 @@ namespace TikettiDB.Controllers
         // GET: IT_tukihenkilot/Delete/5
         public ActionResult Delete(int? id)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             //if (Session["Sahkoposti"] == null)
             //{
             //    return RedirectToAction("Login", "Home");
@@ -341,6 +348,8 @@ namespace TikettiDB.Controllers
             //{
             //    return HttpNotFound();
             //}
+            #endregion
+
             return View();
         }
 
@@ -360,8 +369,8 @@ namespace TikettiDB.Controllers
 
         // POST: IT_tukihenkilot/Delete/5
         [HttpPost, ActionName("_DeleteModal")]
-        //Testejä varten poistettu
-        //[ValidateAntiForgeryToken]
+        //Testejä varten poistettu tai poistetaan
+        [ValidateAntiForgeryToken]
         public ActionResult _DeleteModalConfirmed(int id)
         {
             // Hae poistettava IT-tukihenkilö

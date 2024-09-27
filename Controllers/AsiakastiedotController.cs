@@ -21,6 +21,7 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot
         public ActionResult Index()
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -38,6 +39,7 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
 
             // Hae Asiakastiedot tietokannasta ja sisällytä Kirjautuminen ja Sijainti
             var asiakastiedot = db.Asiakastiedot
@@ -75,6 +77,7 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot/Create
         public ActionResult Create()
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -92,6 +95,8 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
+
             //pudotusvalikon viewbag
             ViewBag.Postinro = new SelectList(db.Postinumero, "Postinro", "Postinro");
 
@@ -276,6 +281,7 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot/ModalEdit/5
         public ActionResult _ModalEdit(int? id)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -294,6 +300,7 @@ namespace TikettiDB.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            #endregion
 
             Asiakastiedot asiakastiedot = db.Asiakastiedot.Find(id);
 
@@ -357,6 +364,7 @@ namespace TikettiDB.Controllers
         // GET: Asiakastiedot/Delete/5
         public ActionResult Delete(int? id)
         {
+            #region//Rajaus kuka pääsee millekin sivulle
             if (Session["Sahkoposti"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -374,6 +382,8 @@ namespace TikettiDB.Controllers
                 ViewBag.ErrorMessage = "Pääsy tälle sivulle vain pääkäyttäjän toimesta!";
                 return View("Error"); // Luo virhesivu tai ohjaa käyttäjä virhesivulle
             }
+            #endregion
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
