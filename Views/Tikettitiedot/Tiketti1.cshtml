@@ -10,6 +10,7 @@
     <br />
     <div class="input-group">
         <p class="px-1">@Html.Label("Etsi tiketin numerolla tai asiakkaan nimellä:")</p>
+        @*"hakutoiminto" lähettää hakuehdon*@
         <p class="px-1">@Html.TextBox("hakutoiminto", ViewBag.currentFilter1 as string, new { @class = "form-control" })</p>
         <p class="px-1"><input type="submit" value="Etsi" class="btn btn-default btn-sm" /></p>
         <p class="px-1"><a href="@Url.Action("Tiketti1", "Tikettitiedot")" class="btn btn-default btn-sm">Tyhjennä</a></p>

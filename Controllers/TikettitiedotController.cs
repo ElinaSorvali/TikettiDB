@@ -96,6 +96,7 @@ namespace TikettiDB.Controllers
                     }
                     #endregion
 
+            //kutsuu metodia HaeTikettiTiedot
             var tikettitiedot = HaeTikettiTiedot("Uusi", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
             return View(tikettitiedot.ToList());
@@ -123,6 +124,7 @@ namespace TikettiDB.Controllers
             }
             #endregion
 
+            //kutsuu metodia HaeTikettiTiedot
             var tikettitiedot = HaeTikettiTiedot("Kesken", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
             return View(tikettitiedot.ToList());
@@ -150,6 +152,7 @@ namespace TikettiDB.Controllers
             }
             #endregion
 
+            //kutsuu metodia HaeTikettiTiedot
             var tikettitiedot = HaeTikettiTiedot("Valmis", hakutoiminto);
             ViewBag.currentFilter1 = hakutoiminto;
             return View(tikettitiedot.ToList());
@@ -439,7 +442,8 @@ namespace TikettiDB.Controllers
             {
                 return HttpNotFound();
             }
-            // Hae kirjautuneen käyttäjän sähköposti istunnosta
+            //Hae kirjautuneen käyttäjän sähköposti istunnosta ettei it-henkilö joudu valitsemaan joka kerta
+            //sähköpostiaan valikosta uudelleen
             string userEmail = Session["Sahkoposti"]?.ToString();
 
             //Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
@@ -481,7 +485,8 @@ namespace TikettiDB.Controllers
                 // Päivittää
                 vanhaTiketti.RatkaisunKuvaus = tikettitiedot.RatkaisunKuvaus;
                 vanhaTiketti.Status = tikettitiedot.Status;
-                // Hae kirjautuneen käyttäjän sähköposti istunnosta
+                //Hae kirjautuneen käyttäjän sähköposti istunnosta ettei it-henkilö joudu valitsemaan joka kerta
+                //sähköpostiaan valikosta uudelleen
                 string userEmail = Session["Sahkoposti"]?.ToString();
 
                 // Hae kirjautuneen käyttäjän itHenkiloID sähköpostin perusteella
